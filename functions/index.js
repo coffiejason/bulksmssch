@@ -133,7 +133,7 @@ const downloadFile = async() => {
   };
 
   // Downloads the file
-  await storage.bucket('gs://ispylegon.appspot.com').file('file.csv').download(options);
+  await storage.bucket('gs://bulksmssch.appspot.com').file('file.csv').download(options);
 
   console.log(
     //`gs://${bucket}/${filename} downloaded to ${destFilename}.`
