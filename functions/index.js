@@ -104,7 +104,7 @@ app.post('/upload', multer.single('file'), async(req, res) => {
 
   let file = req.file;
 
-  let taskid = req.body.id;
+  //let taskid = req.body.id;
   
   if (file) {
     uploadImageToStorage(file).then((success) => {
@@ -150,17 +150,15 @@ app.post('/bulksms', multer.single('file'), async(req, res) => {
   let taskid = req.body.id;
   
   if (file) {
+    readcsv2(file,res);
+    /*
     uploadImageToStorage(file).then((success) => {
-      /*console.log(success);
-      res.status(200).send({
-        status: 'success',
-        url: success
-      });*/
+
 
       writeUrl(taskid,res,success);
     }).catch((error) => {
       console.error(error);
-    });
+    });*/
   }
   else{
     console.log('here 2');
@@ -188,6 +186,26 @@ function readcsv(){
         //   { NAME: 'Bugs Bunny', AGE: '22' }
         // ]
       });
+}
+
+function readcsv2(file,){
+  //__dirname+'/file.csv'
+
+  const csv = require('csv-parser')
+  const fs = require('fs')
+  const results = [];
+  
+  fs.createReadStream(file)
+    .pipe(csv())
+    .on('data', (data) => results.push(data))
+    .on('end', () => {
+      console.log(results[0].NAME);
+      // [
+      //   { NAME: 'Daffy Duck', AGE: '24' },
+      //   { NAME: 'Bugs Bunny', AGE: '22' }
+      // ]
+      res.sendStatus(200);
+    });
 }
 
 app.get('/readcsv',(req,res)=>{
