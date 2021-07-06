@@ -1,89 +1,261 @@
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/progressbar.css">
+    <link rel="stylesheet" type="text/css" href="css/modal.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Welcome to Firebase Hosting</title>
+    
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- update the version number as needed -->
-    <script defer src="/__/firebase/8.7.0/firebase-app.js"></script>
-    <!-- include only the Firebase features as you need -->
-    <script defer src="/__/firebase/8.7.0/firebase-auth.js"></script>
-    <script defer src="/__/firebase/8.7.0/firebase-database.js"></script>
-    <script defer src="/__/firebase/8.7.0/firebase-firestore.js"></script>
-    <script defer src="/__/firebase/8.7.0/firebase-functions.js"></script>
-    <script defer src="/__/firebase/8.7.0/firebase-messaging.js"></script>
-    <script defer src="/__/firebase/8.7.0/firebase-storage.js"></script>
-    <script defer src="/__/firebase/8.7.0/firebase-analytics.js"></script>
-    <script defer src="/__/firebase/8.7.0/firebase-remote-config.js"></script>
-    <script defer src="/__/firebase/8.7.0/firebase-performance.js"></script>
-    <!-- 
-      initialize the SDK after all desired features are loaded, set useEmulator to false
-      to avoid connecting the SDK to running emulators.
-    -->
-    <script defer src="/__/firebase/init.js?useEmulator=true"></script>
-
-    <style media="screen">
-      body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 0; }
-      #message { background: white; max-width: 360px; margin: 100px auto 16px; padding: 32px 24px; border-radius: 3px; }
-      #message h2 { color: #ffa100; font-weight: bold; font-size: 16px; margin: 0 0 8px; }
-      #message h1 { font-size: 22px; font-weight: 300; color: rgba(0,0,0,0.6); margin: 0 0 16px;}
-      #message p { line-height: 140%; margin: 16px 0 24px; font-size: 14px; }
-      #message a { display: block; text-align: center; background: #039be5; text-transform: uppercase; text-decoration: none; color: white; padding: 16px; border-radius: 4px; }
-      #message, #message a { box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); }
-      #load { color: rgba(0,0,0,0.4); text-align: center; font-size: 13px; }
-      @media (max-width: 600px) {
-        body, #message { margin-top: 0; background: white; box-shadow: none; }
-        body { border-top: 16px solid #ffa100; }
-      }
-    </style>
   </head>
+
   <body>
-    <div id="message">
-      <h2>Welcome</h2>
-      <h1>Firebase Hosting Setup Complete</h1>
-      <p>You're seeing this because you've successfully setup Firebase Hosting. Now it's time to go build something extraordinary!</p>
-      <a target="_blank" href="https://firebase.google.com/docs/hosting/">Open Hosting Documentation</a>
+    <nav class="navbar navbar-expand-md navbar-light">
+      <a class="navbar-brand" href="index.html">
+        <img src="img/logo_text.png" alt="" width="100" height="48">
+      </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="collapsibleNavbar">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="index.html">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="test.html">Response</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="contact.html">Contact us</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="login.html">Log out</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">  </a>
+          </li>   
+        </ul>
+      </div>  
+    </nav>
+    <div class="jumbotron jumbotron-fluid">
+      
+        <div class="container">
+          <h1>Submit Response</h1>      
+        </div>
     </div>
-    <p id="load">Firebase SDK Loading&hellip;</p>
+    <ul class="list-group">
+      <li class="list-group-item list-group-item-info" style="margin-left: 5%; margin-right: 15%; margin-top: 1%;">
+        <h6 id="message" style="margin-bottom: 2%;"> </h6>
+        <small id="location"> </small></br>
+        <small id="to"> </small></br>
+        <small id="from"> </small>
+        <p id="time"> </p>
+      </li>
 
+      <li id="responseLi" class="list-group-item list-group-item" style="margin-left: 15%; margin-right: 5%; margin-top: 2%; display: none;">
+        <h6 id="responseText" style="margin-bottom: 2%;">Madam Mavis Gardener, Please my ACA 1 grades hasnt shown, my name is Coffie Jason Dzogbewu and my index number is 10623109</h6>
+        <p id="responseTime">14th Feb 2021 10:05 AM</p>
+
+        <img id="response_proof" style="width: 100px; margin-top: 10px; display: none;" src="#">
+
+        <!-- The Modal -->
+        <div id="myModal" class="modal">
+          <span class="close">&times;</span>
+          <img class="modal-content" id="img01">
+          <div id="caption"></div>
+        </div>
+      </li>
+
+
+      
+
+
+      <clas class="list-group-item list-group-item-light" style="margin-left: 0%; margin-right: 0%;  margin-top: 5%;">
+        <div style="display: none;" id="response_isrequired">
+          <label style="color: red;">* You cant submit an empty response</label>
+        </div>
+        <input type="text" id="textResponse" class="form-control" placeholder="Response to user" aria-label="Username" aria-describedby="basic-addon1">
+        
+        <input type="file" accept=".csv" id="fileInput" style="margin-top: 10px;" capture="camera">
+        
+        <br><img id="myImg" style="width: 100px; margin-top: 10px; display: none;" src="#">
+
+        <progress class="pure-material-progress-circular" id="progressbar" style="margin-top: 2%; width: 40px; height: 40px; display: none;"></progress>
+        <div id="upload_div" style="display: none;" onclick="uploadImg()">
+          <img src="images/photo.png" style="width: 50px; margin: 1%;"/>
+        </div>
+
+        <!--
+        <img src="images/sound-bars.png" style="width: 5%; margin: 1%;"/>
+        <img src="images/video-player.png" style="width: 5%; margin: 1%;"/>-->
+        <p> </p>
+        <button type="button" class="btn btn-primary" style="margin-top: 2%; margin: auto; width: 30%; display: block;"id="formButton" onclick="submitResponse()"> Send </button>
+
+      </li>
+      
+    </ul>
     <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        const loadEl = document.querySelector('#load');
-        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
-        // // The Firebase SDK is initialized and available here!
-        //
-        // firebase.auth().onAuthStateChanged(user => { });
-        // firebase.database().ref('/path/to/ref').on('value', snapshot => { });
-        // firebase.firestore().doc('/foo/bar').get().then(() => { });
-        // firebase.functions().httpsCallable('yourFunction')().then(() => { });
-        // firebase.messaging().requestPermission().then(() => { });
-        // firebase.storage().ref('/path/to/ref').getDownloadURL().then(() => { });
-        // firebase.analytics(); // call to activate
-        // firebase.analytics().logEvent('tutorial_completed');
-        // firebase.performance(); // call to activate
-        //
-        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
 
-        try {
-          let app = firebase.app();
-          let features = [
-            'auth', 
-            'database', 
-            'firestore',
-            'functions',
-            'messaging', 
-            'storage', 
-            'analytics', 
-            'remoteConfig',
-            'performance',
-          ].filter(feature => typeof app[feature] === 'function');
-          loadEl.textContent = `Firebase SDK loaded with ${features.join(', ')}`;
-        } catch (e) {
-          console.error(e);
-          loadEl.textContent = 'Error loading the Firebase SDK, check the console.';
-        }
+      window.addEventListener('load', function() {
+    
+        document.querySelector('input[type="file"]').addEventListener('change', function() {
+            if (this.files && this.files[0]) {
+                var img = document.querySelector('img');
+                img.onload = () => {
+                    //URL.revokeObjectURL(img.src);  // no longer needed, free memory
+                }
+
+                //img.src = URL.createObjectURL(this.files[0]); // set src to blob url
+                img.src = 'img/logo.jpg';
+                //console.log(img.src)
+                
+                /*
+                var x = document.getElementById("myImg");
+                if (x.style.display === "none") {
+                  x.style.display = "block";
+                }
+
+               var x = document.getElementById("upload_div");
+                if (x.style.display === "none") {
+                  x.style.display = "block";
+                }*/
+
+                uploadImg();
+            }
+        });
       });
+
+      function uploadImg(){
+        url = document.querySelector('img').src
+        fileInput = document.querySelector('input[type="file"]');
+
+        var x = document.getElementById("progressbar");
+            if (x.style.display === "none") {
+              x.style.display = "block";
+        }
+
+        var x = document.getElementById("upload_div");
+            if (x.style.display === "block") {
+              x.style.display = "none";
+        }
+
+          var data = new FormData();
+          data.append("file", fileInput.files[0]);
+          data.append("id", "test");
+          
+          var xhr = new XMLHttpRequest();
+          xhr.withCredentials = true;
+
+          xhr.addEventListener("readystatechange", function() {
+            if(this.readyState === 4) {
+              console.log(this.responseText);
+
+            var x = document.getElementById("progressbar");
+            if (x.style.display === "block") {
+              x.style.display = "none";
+            }
+
+            alert('upload complete');
+            }
+            
+            /*
+            var x = document.getElementById("progressbar");
+            if (x.style.display === "block") {
+              x.style.display = "none";
+            }*/
+
+            //alert('upload complete');
+          });
+
+          xhr.open("POST", "https://bulksmssch.herokuapp.com/bulksms");
+
+          xhr.send(data);
+
+        /*
+        if(url.search('blob:') == 0){
+
+        }
+        else{
+          alert('Take a picture first')
+        }*/
+      }
+
+      function submitResponse(){
+        var textResponse = document.getElementById("textResponse").value;
+
+        if(textResponse.length == 0){
+                var x = document.getElementById("response_isrequired");
+                if (x.style.display === "none") {
+                  x.style.display = "block";
+                }
+        }
+        else{
+
+          var x = document.getElementById("response_isrequired");
+          if (x.style.display === "block") {
+            x.style.display = "none";
+          }
+
+          var xhr = new XMLHttpRequest();
+          xhr.open("POST", "https://ispylegon.herokuapp.com/postResponse", true);
+          xhr.setRequestHeader('Content-Type', 'application/json');
+          xhr.responseType = 'json';
+
+          xhr.onload  = function() {
+            var jsonResponse = xhr.response;
+            location.href = "task.html?taskid="+taskid;
+          };
+
+          xhr.send(JSON.stringify({
+              taskid: taskid,
+              textResponse: textResponse,
+              icsid: icsid
+          }));
+
+        }
+      }
+      
+      getModal();
+
+      function getModal(){
+        // Get the modal
+        var modal = document.getElementById("myModal");
+
+        // Get the image and insert it inside the modal - use its "alt" text as a caption
+        var img = document.getElementById("response_proof");
+        var modalImg = document.getElementById("img01");
+        var captionText = document.getElementById("caption");
+        img.onclick = function(){
+          modal.style.display = "block";
+          modalImg.src = this.src;
+          captionText.innerHTML = this.alt;
+        }
+
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function() { 
+          modal.style.display = "none";
+        }
+      }
+
     </script>
+
+
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-app.js"></script>
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+        https://firebase.google.com/docs/web/setup#available-libraries -->
+
+    <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-analytics.js"></script>
+      
+    <script src="js/firebase.js"></script>
   </body>
+
 </html>

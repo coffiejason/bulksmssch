@@ -145,7 +145,7 @@ const downloadFile = async() => {
 app.post('/bulksms', multer.single('file'), async(req, res) => {
   console.log('Upload Image begun');
 
-  let file = req.file;
+  let file = ''+req.file;
 
   let taskid = req.body.id;
   
