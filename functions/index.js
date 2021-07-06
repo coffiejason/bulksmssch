@@ -24,8 +24,8 @@ app.use(bodyParser.json());
 
 var eventEmitter = new events.EventEmitter();
 
-eventEmitter.on('readfile', async function () {
-  readcsv();
+eventEmitter.on('readfile', async function (res) {
+  readcsv(res);
 });
 
 const storage = new Storage({
@@ -125,7 +125,7 @@ app.post('/upload', multer.single('file'), async(req, res) => {
 });
 
 
-const downloadFile = async() => {
+const downloadFile = async(filename,res) => {
   let destFilename = './data.csv';
   const options = {
     // The path to which the file should be downloaded, e.g. "./file.txt"
@@ -133,32 +133,34 @@ const downloadFile = async() => {
   };
 
   // Downloads the file
-  await storage.bucket('gs://bulksmssch.appspot.com').file('file.csv').download(options);
+  await storage.bucket('gs://bulksmssch.appspot.com').file(filename).download(options);
 
   console.log(
     //`gs://${bucket}/${filename} downloaded to ${destFilename}.`
   );
 
-  eventEmitter.emit('readfile');
+  eventEmitter.emit('readfile',res);
 } 
 
 app.post('/bulksms', multer.single('file'), async(req, res) => {
   console.log('Upload Image begun');
 
-  let file = ''+req.file;
+  let file = req.file;
 
   let taskid = req.body.id;
   
   if (file) {
-    readcsv2(file,res);
-    /*
     uploadImageToStorage(file).then((success) => {
+      /*console.log(success);
+      res.status(200).send({
+        status: 'success',
+        url: success
+      });*/
 
-
-      writeUrl(taskid,res,success);
+      downloadFile(''+file.originalname);
     }).catch((error) => {
       console.error(error);
-    });*/
+    });
   }
   else{
     console.log('here 2');
@@ -169,7 +171,7 @@ app.get('/getfile', async(req,res)=>{
   downloadFile();
 });
 
-function readcsv(){
+function readcsv(res){
     //__dirname+'/file.csv'
 
     const csv = require('csv-parser')
@@ -185,10 +187,12 @@ function readcsv(){
         //   { NAME: 'Daffy Duck', AGE: '24' },
         //   { NAME: 'Bugs Bunny', AGE: '22' }
         // ]
+
+        res.sendStatus(200);
       });
 }
 
-function readcsv2(file,){
+function readcsv2(file){
   //__dirname+'/file.csv'
 
   const csv = require('csv-parser')
@@ -204,7 +208,6 @@ function readcsv2(file,){
       //   { NAME: 'Daffy Duck', AGE: '24' },
       //   { NAME: 'Bugs Bunny', AGE: '22' }
       // ]
-      res.sendStatus(200);
     });
 }
 
