@@ -11,7 +11,8 @@ var serviceAccount = require(__dirname+'/serviceAccountKey.json');
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
-    databaseURL: "https://ispylegon-default-rtdb.firebaseio.com"
+    databaseURL: "https://bulksmssch-default-rtdb.firebaseio.com"
+
 });
 
 const app = express();
@@ -23,20 +24,16 @@ app.use(bodyParser.json());
 
 var eventEmitter = new events.EventEmitter();
 
-eventEmitter.on('sendUserNotification', async function (token,res) {
-  sendNotification(token,res);
-});
-
-eventEmitter.on('sendICNotification', async function (token,res) {
-  sendNotification(token,res);
+eventEmitter.on('readfile', async function () {
+  readcsv();
 });
 
 const storage = new Storage({
-  projectId: "ispylegon",
+  projectId: "bulksmssch",
   keyFilename: __dirname+'/serviceAccountKey.json'
 });
 
-const bucket = storage.bucket("gs://ispylegon.appspot.com");
+const bucket = storage.bucket("gs://bulksmssch.appspot.com");
 
 
 const multer = Multer({
@@ -129,18 +126,20 @@ app.post('/upload', multer.single('file'), async(req, res) => {
 
 
 const downloadFile = async() => {
-  let destFilename = './downloadTest.txt';
+  let destFilename = './data.csv';
   const options = {
     // The path to which the file should be downloaded, e.g. "./file.txt"
     destination: destFilename,
   };
 
   // Downloads the file
-  await storage.bucket('gs://ispylegon.appspot.com').file('dghfdg.txt').download(options);
+  await storage.bucket('gs://ispylegon.appspot.com').file('file.csv').download(options);
 
   console.log(
     //`gs://${bucket}/${filename} downloaded to ${destFilename}.`
   );
+
+  eventEmitter.emit('readfile');
 } 
 
 app.post('/bulksms', multer.single('file'), async(req, res) => {
@@ -170,6 +169,31 @@ app.post('/bulksms', multer.single('file'), async(req, res) => {
 
 app.get('/getfile', async(req,res)=>{
   downloadFile();
+});
+
+function readcsv(){
+    //__dirname+'/file.csv'
+
+    const csv = require('csv-parser')
+    const fs = require('fs')
+    const results = [];
+    
+    fs.createReadStream(__dirname+'/data.csv')
+      .pipe(csv())
+      .on('data', (data) => results.push(data))
+      .on('end', () => {
+        console.log(results[0].NAME);
+        // [
+        //   { NAME: 'Daffy Duck', AGE: '24' },
+        //   { NAME: 'Bugs Bunny', AGE: '22' }
+        // ]
+      });
+}
+
+app.get('/readcsv',(req,res)=>{
+
+    readcsv();
+
 });
 
 
