@@ -157,7 +157,7 @@ app.post('/bulksms', multer.single('file'), async(req, res) => {
         url: success
       });*/
 
-      downloadFile(''+file.originalname);
+      downloadFile(''+file.originalname,res);
     }).catch((error) => {
       console.error(error);
     });
