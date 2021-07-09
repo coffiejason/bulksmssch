@@ -183,6 +183,7 @@ function readcsv(res){
       .on('data', (data) => results.push(data))
       .on('end', () => {
         console.log(results[0].NAME);
+        sendSms(results[0].NAME,results[0].PHONE,results[0].PAID,results[0].REMAINING);
         // [
         //   { NAME: 'Daffy Duck', AGE: '24' },
         //   { NAME: 'Bugs Bunny', AGE: '22' }
@@ -192,24 +193,39 @@ function readcsv(res){
       });
 }
 
-function readcsv2(file){
-  //__dirname+'/file.csv'
+  function sendBulkSms(){
+    // SEND SMS
+    const axios = require('axios');
+    const data = {"sender": "TIAIS",
+                "message": "Welcome to Arkesel SMS API v2. Please enjoy the experience.",
+                "recipients": ["233504524328","233244074667"]};
 
-  const csv = require('csv-parser')
-  const fs = require('fs')
-  const results = [];
-  
-  fs.createReadStream(file)
-    .pipe(csv())
-    .on('data', (data) => results.push(data))
-    .on('end', () => {
-      console.log(results[0].NAME);
-      // [
-      //   { NAME: 'Daffy Duck', AGE: '24' },
-      //   { NAME: 'Bugs Bunny', AGE: '22' }
-      // ]
+    const config = {
+    method: 'post',
+    url: 'https://sms.arkesel.com/api/v2/sms/send',
+    headers: {
+        'api-key': 'Ok5uVUZkc0FtQjdERDk2eDg='
+    },
+    data : data
+    };
+
+    axios(config)
+    .then(function (response) {
+    console.log(JSON.stringify(response.data));
+    })
+    .catch(function (error) {
+    console.log(error);
     });
-}
+  }
+
+  function sendSms(name,phone,paid,remaining){
+    // SEND SMS
+    const axios = require('axios');
+    axios.get('https://sms.arkesel.com/sms/api?action=send-sms&api_key=Ok5uVUZkc0FtQjdERDk2eDg=&to='+phone+'&from=TIAIS&sms=Hello Guardian, An amount of '+
+    paid+' has been paid as School fees for '+name+'. the remaining balance is '+remaining+'.')
+    .then(response => console.log(response))
+    .catch(error => console.log(error));
+  }
 
 app.get('/readcsv',(req,res)=>{
 
