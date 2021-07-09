@@ -183,7 +183,7 @@ function readcsv(res){
       .on('data', (data) => results.push(data))
       .on('end', () => {
         console.log(results[0].NAME);
-        sendSms(results[0].NAME,results[0].PHONE,results[0].PAID,results[0].REMAINING);
+        //sendSms(results[0].NAME,results[0].PHONE,results[0].PAID,results[0].REMAINING);
         // [
         //   { NAME: 'Daffy Duck', AGE: '24' },
         //   { NAME: 'Bugs Bunny', AGE: '22' }
