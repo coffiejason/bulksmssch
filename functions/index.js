@@ -227,11 +227,49 @@ function readcsv(res){
     .catch(error => console.log(error));
   }
 
-app.get('/readcsv',(req,res)=>{
-
-    readcsv();
-
-});
+  app.post('/register',async(req,res)=>{
+    
+    var pushid = db.ref('users/').push().getKey();
+  
+    await db.ref('users/').child(String(pushid)).set({
+        id: pushid,
+        name: req.body.name,
+        phone: req.body.phone,
+        email: req.body.email,
+        password: req.body.password,
+    }, async function(error) {
+      if (error) {
+        console.log(error);
+        res.sendStatus(500);
+      } else {
+        res.sendStatus(200);
+      }
+    });
+  
+    res.send();
+  });
+  
+  app.post('/login',async(req,res)=>{
+    
+    const eventref = db.ref("users");
+    const snapshot = await eventref.once('value');
+    const value = snapshot.val();
+  
+    var data = Object.entries(value);
+  
+    var response = {response: "User not found"};
+  
+    for(let val of data){
+  
+      if((req.body.email === String(val[1].email) || req.body.phone === String(val[1].phone)) && req.body.password ===String(val[1].password)){
+        
+        response = {response: "Success"}
+  
+      }
+    }
+  
+    res.send(response);
+  });
 
 
 
