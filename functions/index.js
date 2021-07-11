@@ -234,7 +234,6 @@ function readcsv(res){
     await db.ref('users/').child(String(pushid)).set({
         id: pushid,
         name: req.body.name,
-        phone: req.body.phone,
         email: req.body.email,
         password: req.body.password,
     }, async function(error) {
@@ -242,7 +241,7 @@ function readcsv(res){
         console.log(error);
         res.sendStatus(500);
       } else {
-        res.sendStatus(200);
+        res.send({response: "Success"});
       }
     });
   

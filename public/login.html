@@ -53,6 +53,34 @@
 
             console.log(email+' - '+password);
 
+            if( email !== '' && password !== ''){
+
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", "https://bulksmssch.herokuapp.com/login", true);
+                xhr.setRequestHeader('Content-Type', 'application/json');
+                xhr.responseType = 'json';
+
+                xhr.onload  = function() {
+                  var jsonResponse = xhr.response;
+
+                  console.log(jsonResponse);
+                  //location.href = "index.html";
+                  
+                  console.log(jsonResponse);
+                };
+
+                xhr.send(JSON.stringify({
+                    name: name,
+                    email: email,
+                    password: password
+                    
+                }));
+
+            }
+            else{
+                alert('some fields are empty');
+            }
+
 
         }
 
@@ -62,6 +90,37 @@
             var password = document.getElementById("sPassword").value;
 
             console.log(name+' - '+email+' - '+password);
+
+            if( email !== '' && password !== ''&& name !== ''){
+
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", "https://bulksmssch.herokuapp.com/register", true);
+                xhr.setRequestHeader('Content-Type', 'application/json');
+                xhr.responseType = 'json';
+
+                xhr.onload  = function() {
+                  var jsonResponse = xhr.response;
+
+                  console.log(""+jsonResponse.id);
+
+                  if(jsonResponse.response+'' === 'Success'){
+                    location.href = "login.html";
+                  }
+                  
+                  console.log(jsonResponse);
+                };
+
+                xhr.send(JSON.stringify({
+                    name: name,
+                    email: email,
+                    password: password
+                    
+                }));
+            }
+            else{
+                alert('some fields are empty');
+            }
+
 
 
         }
