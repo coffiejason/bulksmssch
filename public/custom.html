@@ -49,7 +49,7 @@
       </div>
 
       <div id="datepickerDiv" style="display: none;">    
-        <input id="datepicked" placeholder="Select your date" type="text" name="checkIn" id="datepicker" value="" class="calendar"><i class="fas fa-calendar-check icon"></i>
+        <input placeholder="Select your date" type="text" name="checkIn" id="datepicker" value="" class="calendar"><i class="fas fa-calendar-check icon"></i>
       </div>
       <div class="file-upload-select">
         <div class="file-select-button" >Choose File</div>
@@ -122,7 +122,7 @@
         }
 
           var data = new FormData();
-          var datepicked = document.getElementById("datepicked").value;
+          var datepicked = document.getElementById("datepicker").value;
           var message = document.getElementById("text-area").value;
 
           data.append("file", fileInput.files[0]);

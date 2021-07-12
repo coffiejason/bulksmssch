@@ -176,7 +176,7 @@ app.post('/custom_sms_scheduled', multer.single('file'), async(req, res) => {
   let message = req.body.message;
   let date = req.body.date;
 
-  console.log('')
+  console.log(message+''+date+''+taskid);
   
   if (file) {
     uploadImageToStorage(file).then((success) => {
