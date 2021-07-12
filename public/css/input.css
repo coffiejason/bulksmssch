@@ -1,7 +1,6 @@
-body {
-	width: 728px;
-	margin: 64px auto;
-	background-color: #eee;
+.file-upload {
+	width: 50%;
+	margin: 10% auto;
 	text-align: center;
 }
 
@@ -34,4 +33,11 @@ body {
 }
 .file-upload .file-upload-select input[type="file"] {
 	display: none;
+}
+
+@media screen and (max-width: 768px) {
+	.file-upload{
+		width: 70%;
+	}
+
 }

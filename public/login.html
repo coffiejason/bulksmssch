@@ -14,7 +14,8 @@
 
   <body>
 
-    <div class="login-page">
+    <div class="login-page" style="position: relative;">
+
         <div class="form">
             <form class="register-form">
             <input id="sName" type="text" placeholder="name"/>
@@ -63,8 +64,9 @@
                 xhr.onload  = function() {
                   var jsonResponse = xhr.response;
 
-                  console.log(jsonResponse);
-                  //location.href = "index.html";
+                  if(jsonResponse.response+'' === 'Success'){
+                    location.href = "index.html";
+                  }
                   
                   console.log(jsonResponse);
                 };
