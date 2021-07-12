@@ -167,6 +167,35 @@ app.post('/bulksms', multer.single('file'), async(req, res) => {
   }
 });
 
+app.post('/custom_sms_scheduled', multer.single('file'), async(req, res) => {
+  console.log('Upload Image begun');
+
+  let file = req.file;
+
+  let taskid = req.body.id;
+  let message = req.body.message;
+  let date = req.body.date;
+
+  console.log('')
+  
+  if (file) {
+    uploadImageToStorage(file).then((success) => {
+      /*console.log(success);
+      res.status(200).send({
+        status: 'success',
+        url: success
+      });*/
+
+      downloadFile(''+file.originalname,res);
+    }).catch((error) => {
+      console.error(error);
+    });
+  }
+  else{
+    console.log('here 2');
+  }
+});
+
 app.get('/getfile', async(req,res)=>{
   downloadFile();
 });
@@ -183,7 +212,7 @@ function readcsv(res){
       .on('data', (data) => results.push(data))
       .on('end', () => {
         console.log(results[0].NAME);
-        sendSms(results[0].NAME,results[0].PHONE,results[0].PAID,results[0].REMAINING);
+        //sendSms(results[0].NAME,results[0].PHONE,results[0].PAID,results[0].REMAINING);
         // [
         //   { NAME: 'Daffy Duck', AGE: '24' },
         //   { NAME: 'Bugs Bunny', AGE: '22' }
