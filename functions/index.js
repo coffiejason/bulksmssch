@@ -24,9 +24,10 @@ app.use(bodyParser.json());
 
 var eventEmitter = new events.EventEmitter();
 
-eventEmitter.on('readfile', async function (res) {
-  readcsv(res);
+eventEmitter.on('readfile', async function (res,message,date) {
+  readcsv(res,message,date);
 });
+
 
 const storage = new Storage({
   projectId: "bulksmssch",
@@ -125,7 +126,7 @@ app.post('/upload', multer.single('file'), async(req, res) => {
 });
 
 
-const downloadFile = async(filename,res) => {
+const downloadFile = async(filename,res,message,date) => {
   let destFilename = './data.csv';
   const options = {
     // The path to which the file should be downloaded, e.g. "./file.txt"
@@ -139,7 +140,7 @@ const downloadFile = async(filename,res) => {
     //`gs://${bucket}/${filename} downloaded to ${destFilename}.`
   );
 
-  eventEmitter.emit('readfile',res);
+  eventEmitter.emit('readfile',res,message,date);
 } 
 
 app.post('/bulksms', multer.single('file'), async(req, res) => {
@@ -186,7 +187,7 @@ app.post('/custom_sms_scheduled', multer.single('file'), async(req, res) => {
         url: success
       });*/
 
-      downloadFile(''+file.originalname,res);
+      downloadFile(''+file.originalname,res,message,date);
     }).catch((error) => {
       console.error(error);
     });
@@ -200,7 +201,7 @@ app.get('/getfile', async(req,res)=>{
   downloadFile();
 });
 
-function readcsv(res){
+function readcsv(res,message,date){
     //__dirname+'/file.csv'
 
     const csv = require('csv-parser')
@@ -212,7 +213,22 @@ function readcsv(res){
       .on('data', (data) => results.push(data))
       .on('end', () => {
         console.log(results[0].NAME);
-        //sendSms(results[0].NAME,results[0].PHONE,results[0].PAID,results[0].REMAINING);
+
+        if(message === '' && date === ''){
+          //instant fees
+          //sendSms(results[0].NAME,results[0].PHONE,results[0].PAID,results[0].REMAINING);
+        }
+        else if(message !== '' && date === ''){
+          //send instant custom
+        }
+        else if(message === '' && date !== ''){
+          //send scheduled fees
+        }
+        else if(message !== '' && date !== ''){
+
+          //scheduled custom
+        }
+        
         // [
         //   { NAME: 'Daffy Duck', AGE: '24' },
         //   { NAME: 'Bugs Bunny', AGE: '22' }
@@ -252,6 +268,14 @@ function readcsv(res){
     const axios = require('axios');
     axios.get('https://sms.arkesel.com/sms/api?action=send-sms&api_key=Ok5uVUZkc0FtQjdERDk2eDg=&to='+phone+'&from=TIAIS&sms=Hello Guardian, An amount of '+
     paid+' has been paid as School fees for '+name+'. the remaining balance is '+remaining+'.')
+    .then(response => console.log(response))
+    .catch(error => console.log(error));
+  }
+
+  function sendSmsIC(phone,message){
+    // SEND SMS
+    const axios = require('axios');
+    axios.get('https://sms.arkesel.com/sms/api?action=send-sms&api_key=Ok5uVUZkc0FtQjdERDk2eDg=&to='+phone+'&from=TIAIS&sms='+message+' ')
     .then(response => console.log(response))
     .catch(error => console.log(error));
   }
