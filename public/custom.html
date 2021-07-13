@@ -150,14 +150,14 @@
 
           var data = new FormData();
           var datepicked = document.getElementById("datepicker").value;
-          var message = document.getElementById("text-area").value;
+          var message = ''+document.getElementById("text-area").value;
 
           data.append("file", fileInput.files[0]);
           data.append("id", "test");
           data.append("message",""+message);
 
           if(datepicked !== ''){
-            data.append("date",""+datepicked);
+            data.append("date",''+datepicked);
           }
           
           var xhr = new XMLHttpRequest();

@@ -140,6 +140,8 @@ const downloadFile = async(filename,res,message,date) => {
     //`gs://${bucket}/${filename} downloaded to ${destFilename}.`
   );
 
+  //console.log('from DownloadFile'+message+' '+date);
+
   eventEmitter.emit('readfile',res,message,date);
 } 
 
@@ -216,13 +218,13 @@ app.get('/getfile', async(req,res)=>{
 
           console.log(message+' '+date);
 
-          if(message === '' && date === ''){
+          if(message === '' && date === '' || message === 'undefined' && date === 'undefined'){
             //instant fees
 
             console.log('instant fees');
             //sendSms(results[0].NAME,results[0].PHONE,results[0].PAID,results[0].REMAINING);
           }
-          else if(message !== '' && date === ''){
+          else if(message !== '' && date === '' || message !== 'undefined' && date === 'undefined'){
             //send instant custom
             console.log('instant custom');
 
@@ -235,12 +237,12 @@ app.get('/getfile', async(req,res)=>{
 
             //sendBulkSms(message,contacts);
           }
-          else if(message === '' && date !== ''){
+          else if(message === '' && date !== '' || message !== 'undefined' && date !== 'undefined'){
             //send scheduled fees
             console.log('scheduled fees');
             //sendSms_scheduled(results[0].NAME,results[0].PHONE,results[0].PAID,results[0].REMAINING,date);
           }
-          else if(message !== '' && date !== ''){
+          else if(message !== '' && date !== '' || message !== 'undefined' && date !== 'undefined'){
 
             //scheduled custom
             console.log('scheduled custom');
