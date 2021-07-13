@@ -214,6 +214,8 @@ app.get('/getfile', async(req,res)=>{
         .on('end', () => {
           //console.log(results[0].NAME);
 
+          console.log(message+' '+date);
+
           if(message === '' && date === ''){
             //instant fees
 
@@ -231,12 +233,12 @@ app.get('/getfile', async(req,res)=>{
               contacts.push(String(row.PHONE));
             }
 
-            sendBulkSms(message,contacts);
+            //sendBulkSms(message,contacts);
           }
           else if(message === '' && date !== ''){
             //send scheduled fees
             console.log('scheduled fees');
-            sendSms_scheduled(results[0].NAME,results[0].PHONE,results[0].PAID,results[0].REMAINING,date);
+            //sendSms_scheduled(results[0].NAME,results[0].PHONE,results[0].PAID,results[0].REMAINING,date);
           }
           else if(message !== '' && date !== ''){
 
@@ -250,7 +252,7 @@ app.get('/getfile', async(req,res)=>{
               contacts.push(String(row.PHONE));
             }
 
-            sendBulkSms_scheduled(message,contacts,date);
+            //sendBulkSms_scheduled(message,contacts,date);
           }
           
           // [
@@ -305,7 +307,7 @@ app.get('/getfile', async(req,res)=>{
     // SEND SMS
 
     console.log(contacts);
-    
+
     const axios = require('axios');
     const data = {"sender": "TIAIS",
                   "message": message,
