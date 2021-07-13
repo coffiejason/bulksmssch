@@ -271,9 +271,6 @@ app.get('/getfile', async(req,res)=>{
     }, async function(error) {
       if (error) {
         console.log(error);
-        res.sendStatus(500);
-      } else {
-        createUser(pushid,req.body.phone,req.body.email,req.body.password,res);
       }
     });
   }
