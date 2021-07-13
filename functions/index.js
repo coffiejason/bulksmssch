@@ -339,7 +339,7 @@ app.get('/getfile', async(req,res)=>{
       method: 'post',
       url: 'https://sms.arkesel.com/api/v2/sms/send',
       headers: {
-        'api-key': 'cE9QRUkdjsjdfjkdsj9kdiieieififiw=',
+        'api-key': 'Ok5uVUZkc0FtQjdERDk2eDg=',
       },
       data : data
     };
