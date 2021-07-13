@@ -114,8 +114,15 @@
         }
 
           var data = new FormData();
+
+          var datepicked = document.getElementById("datepicker").value;
+
           data.append("file", fileInput.files[0]);
           data.append("id", "test");
+
+          if(datepicked !== ''){
+            data.append("date",""+datepicked);
+          }
           
           var xhr = new XMLHttpRequest();
           xhr.withCredentials = true;
@@ -194,7 +201,7 @@
       function datepicker(){
             jQuery(document).ready(function () {
             jQuery('#datepicker').datepicker({
-                format: 'dd-mm-yyyy',
+                dateFormat: 'dd-mm-yy',
                 startDate: '+1d'
             });
         });
@@ -224,6 +231,8 @@
               if (x.style.display === "block") {
                 x.style.display = "none";
           }
+
+          document.getElementById("datepicker").value = '';
 
 
         }

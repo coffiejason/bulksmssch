@@ -212,21 +212,40 @@ function readcsv(res,message,date){
       .pipe(csv())
       .on('data', (data) => results.push(data))
       .on('end', () => {
-        console.log(results[0].NAME);
+        //console.log(results[0].NAME);
 
         if(message === '' && date === ''){
           //instant fees
-          //sendSms(results[0].NAME,results[0].PHONE,results[0].PAID,results[0].REMAINING);
+          sendSms(results[0].NAME,results[0].PHONE,results[0].PAID,results[0].REMAINING);
         }
         else if(message !== '' && date === ''){
           //send instant custom
+
+          let contacts = []
+
+          for(let row of results){
+            console.log(String(row.PHONE));
+            contacts.push(String(row.PHONE));
+          }
+
+          sendBulkSms(message,contacts);
         }
         else if(message === '' && date !== ''){
           //send scheduled fees
+          sendSms_scheduled(results[0].NAME,results[0].PHONE,results[0].PAID,results[0].REMAINING,date);
         }
         else if(message !== '' && date !== ''){
 
           //scheduled custom
+
+          let contacts = []
+
+          for(let row of results){
+            console.log(String(row.PHONE));
+            contacts.push(String(row.PHONE));
+          }
+
+          sendBulkSms_scheduled(message,contacts,date);
         }
         
         // [
@@ -238,12 +257,33 @@ function readcsv(res,message,date){
       });
 }
 
-  function sendBulkSms(){
+  function sendSms(name,phone,paid,remaining){
+    // SEND SMS
+    const axios = require('axios');
+    axios.get('https://sms.arkesel.com/sms/api?action=send-sms&api_key=Ok5uVUZkc0FtQjdERDk2eDg=&to='+phone+'&from=TIAIS&sms=Hello Guardian, An amount of '+
+    paid+' has been paid as School fees for '+name+'. the new outstanding balance is '+remaining+'.')
+    .then(response => console.log(response))
+    .catch(error => console.log(error));
+  }
+
+  function sendSms_scheduled(name,phone,paid,remaining,date){
+
+    // SCHEDULE SMS
+    const axios = require('axios');
+    //format date to match this format: DD-MM-YYYY
+    axios.get('https://sms.arkesel.com/sms/api?action=send-sms&api_key=Ok5uVUZkc0FtQjdERDk2eDg=&to='+phone+'&from=TIAIS&sms=Hello Guardian, An amount of '+
+    paid+' has been paid as School fees for '+name+'. the new outstanding balance is '+remaining+'.&schedule='+date+' 10:00 AM')
+    .then(response => console.log(response))
+    .catch(error => console.log(error));
+
+  }
+
+  function sendBulkSms(message,contacts){
     // SEND SMS
     const axios = require('axios');
     const data = {"sender": "TIAIS",
-                "message": "Welcome to Arkesel SMS API v2. Please enjoy the experience.",
-                "recipients": ["233504524328","233244074667"]};
+                  "message": message,
+                  "recipients": contacts};
 
     const config = {
     method: 'post',
@@ -263,21 +303,32 @@ function readcsv(res,message,date){
     });
   }
 
-  function sendSms(name,phone,paid,remaining){
-    // SEND SMS
-    const axios = require('axios');
-    axios.get('https://sms.arkesel.com/sms/api?action=send-sms&api_key=Ok5uVUZkc0FtQjdERDk2eDg=&to='+phone+'&from=TIAIS&sms=Hello Guardian, An amount of '+
-    paid+' has been paid as School fees for '+name+'. the remaining balance is '+remaining+'.')
-    .then(response => console.log(response))
-    .catch(error => console.log(error));
-  }
+  function sendBulkSms_scheduled(message,contacts,date){
 
-  function sendSmsIC(phone,message){
-    // SEND SMS
+    // SCHEDULE SMS
     const axios = require('axios');
-    axios.get('https://sms.arkesel.com/sms/api?action=send-sms&api_key=Ok5uVUZkc0FtQjdERDk2eDg=&to='+phone+'&from=TIAIS&sms='+message+' ')
-    .then(response => console.log(response))
-    .catch(error => console.log(error));
+    const data = {"sender": "TIAIS",
+                  "message": message,
+                  "recipients": contacts,
+                  "scheduled_date": date+" 07:00 AM"};
+
+    const config = {
+      method: 'post',
+      url: 'https://sms.arkesel.com/api/v2/sms/send',
+      headers: {
+        'api-key': 'cE9QRUkdjsjdfjkdsj9kdiieieififiw=',
+      },
+      data : data
+    };
+
+    axios(config)
+    .then(function (response) {
+      console.log(JSON.stringify(response.data));
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+
   }
 
   app.post('/register',async(req,res)=>{
