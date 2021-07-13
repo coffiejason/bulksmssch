@@ -216,15 +216,18 @@ app.get('/getfile', async(req,res)=>{
 
           if(message === '' && date === ''){
             //instant fees
-            sendSms(results[0].NAME,results[0].PHONE,results[0].PAID,results[0].REMAINING);
+
+            console.log('instant fees');
+            //sendSms(results[0].NAME,results[0].PHONE,results[0].PAID,results[0].REMAINING);
           }
           else if(message !== '' && date === ''){
             //send instant custom
+            console.log('instant custom');
 
-            let contacts = []
+            let contacts = [];
 
             for(let row of results){
-              console.log(String(row.PHONE));
+              //console.log(String(row.PHONE));
               contacts.push(String(row.PHONE));
             }
 
@@ -232,16 +235,18 @@ app.get('/getfile', async(req,res)=>{
           }
           else if(message === '' && date !== ''){
             //send scheduled fees
+            console.log('scheduled fees');
             sendSms_scheduled(results[0].NAME,results[0].PHONE,results[0].PAID,results[0].REMAINING,date);
           }
           else if(message !== '' && date !== ''){
 
             //scheduled custom
+            console.log('scheduled custom');
 
-            let contacts = []
+            let contacts = [];
 
             for(let row of results){
-              console.log(String(row.PHONE));
+              //console.log(String(row.PHONE));
               contacts.push(String(row.PHONE));
             }
 
@@ -298,6 +303,9 @@ app.get('/getfile', async(req,res)=>{
 
   function sendBulkSms(message,contacts){
     // SEND SMS
+
+    console.log(contacts);
+    
     const axios = require('axios');
     const data = {"sender": "TIAIS",
                   "message": message,
