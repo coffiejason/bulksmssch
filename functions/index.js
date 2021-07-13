@@ -201,61 +201,82 @@ app.get('/getfile', async(req,res)=>{
   downloadFile();
 });
 
-function readcsv(res,message,date){
-    //__dirname+'/file.csv'
+  function readcsv(res,message,date){
+      //__dirname+'/file.csv'
 
-    const csv = require('csv-parser')
-    const fs = require('fs')
-    const results = [];
-    
-    fs.createReadStream(__dirname+'/data.csv')
-      .pipe(csv())
-      .on('data', (data) => results.push(data))
-      .on('end', () => {
-        //console.log(results[0].NAME);
+      const csv = require('csv-parser')
+      const fs = require('fs')
+      const results = [];
+      
+      fs.createReadStream(__dirname+'/data.csv')
+        .pipe(csv())
+        .on('data', (data) => results.push(data))
+        .on('end', () => {
+          //console.log(results[0].NAME);
 
-        if(message === '' && date === ''){
-          //instant fees
-          sendSms(results[0].NAME,results[0].PHONE,results[0].PAID,results[0].REMAINING);
-        }
-        else if(message !== '' && date === ''){
-          //send instant custom
-
-          let contacts = []
-
-          for(let row of results){
-            console.log(String(row.PHONE));
-            contacts.push(String(row.PHONE));
+          if(message === '' && date === ''){
+            //instant fees
+            sendSms(results[0].NAME,results[0].PHONE,results[0].PAID,results[0].REMAINING);
           }
+          else if(message !== '' && date === ''){
+            //send instant custom
 
-          sendBulkSms(message,contacts);
-        }
-        else if(message === '' && date !== ''){
-          //send scheduled fees
-          sendSms_scheduled(results[0].NAME,results[0].PHONE,results[0].PAID,results[0].REMAINING,date);
-        }
-        else if(message !== '' && date !== ''){
+            let contacts = []
 
-          //scheduled custom
+            for(let row of results){
+              console.log(String(row.PHONE));
+              contacts.push(String(row.PHONE));
+            }
 
-          let contacts = []
-
-          for(let row of results){
-            console.log(String(row.PHONE));
-            contacts.push(String(row.PHONE));
+            sendBulkSms(message,contacts);
           }
+          else if(message === '' && date !== ''){
+            //send scheduled fees
+            sendSms_scheduled(results[0].NAME,results[0].PHONE,results[0].PAID,results[0].REMAINING,date);
+          }
+          else if(message !== '' && date !== ''){
 
-          sendBulkSms_scheduled(message,contacts,date);
-        }
-        
-        // [
-        //   { NAME: 'Daffy Duck', AGE: '24' },
-        //   { NAME: 'Bugs Bunny', AGE: '22' }
-        // ]
+            //scheduled custom
 
-        res.sendStatus(200);
-      });
-}
+            let contacts = []
+
+            for(let row of results){
+              console.log(String(row.PHONE));
+              contacts.push(String(row.PHONE));
+            }
+
+            sendBulkSms_scheduled(message,contacts,date);
+          }
+          
+          // [
+          //   { NAME: 'Daffy Duck', AGE: '24' },
+          //   { NAME: 'Bugs Bunny', AGE: '22' }
+          // ]
+
+          res.sendStatus(200);
+        });
+  }
+
+  async function writeStatus(type,comment){
+
+    var pushid = db.ref('smslogs/').push().getKey();
+    var datetime = new Date();
+    console.log(datetime);
+  
+    await db.ref('smslogs/').child(String(pushid)).set({
+        id: pushid,
+        type: type, //success or error
+        comment: comment,
+        date: datetime
+    }, async function(error) {
+      if (error) {
+        console.log(error);
+        res.sendStatus(500);
+      } else {
+        createUser(pushid,req.body.phone,req.body.email,req.body.password,res);
+      }
+    });
+  }
 
   function sendSms(name,phone,paid,remaining){
     // SEND SMS
@@ -297,9 +318,11 @@ function readcsv(res,message,date){
     axios(config)
     .then(function (response) {
     console.log(JSON.stringify(response.data));
+      writeStatus('success',String(response.data));
     })
     .catch(function (error) {
     console.log(error);
+      writeStatus('error',String(error.data));
     });
   }
 
@@ -323,10 +346,12 @@ function readcsv(res,message,date){
 
     axios(config)
     .then(function (response) {
-      console.log(JSON.stringify(response.data));
-    })
-    .catch(function (error) {
-      console.log(error);
+        console.log(JSON.stringify(response.data));
+        writeStatus('success',String(response.data));
+      })
+      .catch(function (error) {
+        console.log(error);
+        writeStatus('error',String(error.data));
     });
 
   }
