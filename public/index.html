@@ -21,7 +21,7 @@
   <body>
     <nav>
       <div class="logo">BULK SMS - TIAIS</div>
-      <input type="checkbox" id="checkbox">
+      <input type="checkbox" id="checkbox" onclick="showHide()">
       <label for="checkbox" id="icon">
           <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
       </label>
@@ -33,7 +33,7 @@
   </nav>
 
     <div class="file-upload">
-      <div class="content">
+      <div id="content" class="content" style="display: block;">
         <label class="text">Schedule:</label>
         <label class="switch">
           <input id="schedule" type="checkbox" onclick="revealDatepicker()">
@@ -43,7 +43,7 @@
       <div id="datepickerDiv" style="display: none;">    
         <input placeholder="Select your date" type="text" name="checkIn" id="datepicker" value="" class="calendar"><i class="fas fa-calendar-check icon"></i>
       </div>
-      <div class="file-upload-select">
+      <div id="choosefiletab" class="file-upload-select" style="display: block;">
         <div class="file-select-button" >Choose File</div>
         <div class="file-select-name">No file chosen...</div> 
         <input type="file" accept=".csv" name="file-upload-input" id="file-upload-input">
@@ -238,6 +238,33 @@
         }
         
 
+      }
+
+      function showHide(){
+        console.log(document.getElementById("checkbox").checked);
+        if(document.getElementById("checkbox").checked == true){
+
+          var x = document.getElementById("content");
+            if (x.style.display === "block") {
+              x.style.display = "none";
+          }
+
+          var x = document.getElementById("choosefiletab");
+            if (x.style.display === "block") {
+              x.style.display = "none";
+          }
+        }
+        else if(document.getElementById("checkbox").checked == false){
+          var x = document.getElementById("content");
+            if (x.style.display === "none") {
+              x.style.display = "block";
+          }
+
+          var x = document.getElementById("choosefiletab");
+            if (x.style.display === "none") {
+              x.style.display = "block";
+          }
+        }
       }
     </script>
 
