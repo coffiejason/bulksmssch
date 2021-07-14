@@ -19,15 +19,28 @@
         <div class="form">
             <form class="register-form">
             <input id="sName" type="text" placeholder="name"/>
+            <h5 id="name_isrequired" style="display: none; color: red;">*Name field cannot be empty</h5>
+
             <input id="sPassword" type="password" placeholder="password"/>
-            <input id="sEmail" type="text" placeholder="email address"/>
-            <button onclick="signup()">create</button>
-            <p class="message">Already registered? <a href="#">Sign In</a></p>
+            <h5 id="password_isrequired" style="display: none; color: red;">*Password field cannot be empty</h5>
+
+            <input id="sEmail" type="email" placeholder="email address"/>
+            <h5 id="email_isrequired" style="display: none; color: red;">*Email field cannot be empty</h5>
+
+            <button id="createBtn" style="display: block;" onclick="signup()">create</button>
+            <progress class="pure-material-progress-circular" id="progressbar" style="margin-top: 2%; margin-left: 100px; width: 40px; height: 40px; display: none; position: relative;"></progress>
+
+            <p class="message">Already registered? <a href="">Sign In</a></p>
             </form>
             <form class="login-form">
             <input type="text" id="email" placeholder="email address"/>
+            <h5 id="mail_isrequired" style="display: none; color: red;">*Email field cannot be empty</h5>
+
             <input type="password" id="password" placeholder="password"/>
-            <button onclick="login()">login</button>
+            <h5 id="pass_isrequired" style="display: none; color: red;">*Email field cannot be empty</h5>
+            
+            <button id="loginBtn" style="display: block;" onclick="login()">login</button>
+            <progress class="pure-material-progress-circular" id="progressbar2" style="margin-top: 2%; margin-left: 100px; width: 40px; height: 40px; display: none; position: relative;"></progress>
             <p class="message">Not registered? <a href="#">Create an account</a></p>
             </form>
         </div>
@@ -54,7 +67,54 @@
 
             console.log(email+' - '+password);
 
-            if( email !== '' && password !== ''){
+            function check(){
+                var res = 0;
+                console.log('check begun')
+                if(password.length < 5){
+                    var x = document.getElementById("pass_isrequired");
+                    if (x.style.display === "none") {
+                    x.style.display = "block";
+                    }
+                    res++;
+                }
+
+                if(password.length > 5){
+                    var x = document.getElementById("pass_isrequired");
+                    if (x.style.display === "block") {
+                    x.style.display = "none";
+                    }
+                }
+
+                if(email.length == 0){
+                    var x = document.getElementById("mail_isrequired");
+                    if (x.style.display === "none") {
+                    x.style.display = "block";
+                    }
+                    res++;
+                }
+
+                if(email.length > 0){
+                    var x = document.getElementById("mail_isrequired");
+                    if (x.style.display === "block") {
+                    x.style.display = "none";
+                    }
+                }
+
+                return res;
+            }
+      
+
+            if(check() == 0){
+
+                var x = document.getElementById("progressbar2");
+                    if (x.style.display === "none") {
+                    x.style.display = "block";
+                }
+
+                var x = document.getElementById("loginBtn");
+                    if (x.style.display === "block") {
+                    x.style.display = "none";
+                }
 
                 var xhr = new XMLHttpRequest();
                 xhr.open("POST", "https://bulksmssch.herokuapp.com/login", true);
@@ -93,7 +153,72 @@
 
             console.log(name+' - '+email+' - '+password);
 
-            if( email !== '' && password !== ''&& name !== ''){
+            function check(){
+                var res = 0;
+
+                if(name.length == 0){
+                    var x = document.getElementById("name_isrequired");
+                    if (x.style.display === "none") {
+                    x.style.display = "block";
+                    }
+                    res++
+                }
+
+                if(name.length > 0){
+                    var x = document.getElementById("name_isrequired");
+                    if (x.style.display === "block") {
+                    x.style.display = "none";
+                    }
+                }
+
+                if(password.length < 5){
+                    var x = document.getElementById("password_isrequired");
+                    if (x.style.display === "none") {
+                    x.style.display = "block";
+                    }
+                    res++;
+                }
+
+                if(password.length > 5){
+                    var x = document.getElementById("password_isrequired");
+                    if (x.style.display === "block") {
+                    x.style.display = "none";
+                    }
+                }
+
+                if(email.length == 0){
+                    var x = document.getElementById("email_isrequired");
+                    if (x.style.display === "none") {
+                    x.style.display = "block";
+                    }
+                    res++;
+                }
+
+                if(email.length > 0){
+                    var x = document.getElementById("email_isrequired");
+                    if (x.style.display === "block") {
+                    x.style.display = "none";
+                    }
+                }
+
+                return res;
+            }
+      
+
+
+            if( check() == 0){
+
+                var x = document.getElementById("progressbar");
+                    if (x.style.display === "none") {
+                    x.style.display = "block";
+                }
+
+                var x = document.getElementById("createBtn");
+                    if (x.style.display === "block") {
+                    x.style.display = "none";
+                }
+
+
 
                 var xhr = new XMLHttpRequest();
                 xhr.open("POST", "https://bulksmssch.herokuapp.com/register", true);

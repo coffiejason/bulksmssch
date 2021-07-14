@@ -337,6 +337,6 @@
   .hero__cta--primary:hover,
   .hero__cta--primary:focus {
     background-color: var(--color-white);
-    color: var(--color-dark);
+    color: var(--color-primary);
     box-shadow: none;
   }
