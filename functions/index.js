@@ -224,7 +224,7 @@ app.get('/getfile', async(req,res)=>{
             console.log('instant fees');
             //sendSms(results[0].NAME,results[0].PHONE,results[0].PAID,results[0].REMAINING);
           }
-          else if(message !== '' && date === '' || message !== 'undefined' && date === 'undefined'){
+          else if(message !== '' && date === '' || message != null && date == null){
             //send instant custom
             console.log('instant custom');
 
@@ -237,12 +237,12 @@ app.get('/getfile', async(req,res)=>{
 
             //sendBulkSms(message,contacts);
           }
-          else if(message === '' && date !== '' || message !== 'undefined' && date !== 'undefined'){
+          else if(message === '' && date !== '' || message != null && date != null){
             //send scheduled fees
             console.log('scheduled fees');
             //sendSms_scheduled(results[0].NAME,results[0].PHONE,results[0].PAID,results[0].REMAINING,date);
           }
-          else if(message !== '' && date !== '' || message !== 'undefined' && date !== 'undefined'){
+          else if(message !== '' && date !== '' || message != null && date != null){
 
             //scheduled custom
             console.log('scheduled custom');
