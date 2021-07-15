@@ -33,7 +33,7 @@
       </ul>
   </nav>
 
-  <div id="tasks" class="list-group">
+  <div id="tasks" class="list-group" style="display: block;" onclick="showHide()">
     </div>
 
     <script>
@@ -56,23 +56,13 @@
         console.log(document.getElementById("checkbox").checked);
         if(document.getElementById("checkbox").checked == true){
 
-          var x = document.getElementById("content");
-            if (x.style.display === "block") {
-              x.style.display = "none";
-          }
-
-          var x = document.getElementById("choosefiletab");
+          var x = document.getElementById("tasks");
             if (x.style.display === "block") {
               x.style.display = "none";
           }
         }
         else if(document.getElementById("checkbox").checked == false){
-          var x = document.getElementById("content");
-            if (x.style.display === "none") {
-              x.style.display = "block";
-          }
-
-          var x = document.getElementById("choosefiletab");
+          var x = document.getElementById("tasks");
             if (x.style.display === "none") {
               x.style.display = "block";
           }
