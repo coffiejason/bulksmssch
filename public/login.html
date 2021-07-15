@@ -1,0 +1,144 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" type="text/css" href="css/progressbar.css">
+    <link rel="stylesheet" type="text/css" href="css/login.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <meta charset="utf-8">
+    
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+  </head>
+
+  <body>
+
+    <div class="login-page" style="position: relative;">
+
+        <div class="form">
+            <form class="register-form">
+            <input id="sName" type="text" placeholder="name"/>
+            <input id="sPassword" type="password" placeholder="password"/>
+            <input id="sEmail" type="text" placeholder="email address"/>
+            <button onclick="signup()">create</button>
+            <p class="message">Already registered? <a href="#">Sign In</a></p>
+            </form>
+            <form class="login-form">
+            <input type="text" id="email" placeholder="email address"/>
+            <input type="password" id="password" placeholder="password"/>
+            <button onclick="login()">login</button>
+            <p class="message">Not registered? <a href="#">Create an account</a></p>
+            </form>
+        </div>
+    </div>
+
+
+    <script>
+
+        toggle();
+
+        function toggle(){
+            $('.message a').click(function(){
+                $('form').animate({height: "toggle", opacity: "toggle"}, "slow");
+            });
+
+            $('form').submit(function(e) {
+                e.preventDefault();
+            });
+        }
+
+        function login(){
+            var email = document.getElementById("email").value;
+            var password = document.getElementById("password").value;
+
+            console.log(email+' - '+password);
+
+            if( email !== '' && password !== ''){
+
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", "https://bulksmssch.herokuapp.com/login", true);
+                xhr.setRequestHeader('Content-Type', 'application/json');
+                xhr.responseType = 'json';
+
+                xhr.onload  = function() {
+                  var jsonResponse = xhr.response;
+
+                  if(jsonResponse.response+'' === 'Success'){
+                    location.href = "index.html";
+                  }
+                  
+                  console.log(jsonResponse);
+                };
+
+                xhr.send(JSON.stringify({
+                    name: name,
+                    email: email,
+                    password: password
+                    
+                }));
+
+            }
+            else{
+                alert('some fields are empty');
+            }
+
+
+        }
+
+        function signup(){
+            var name = document.getElementById("sName").value;
+            var email = document.getElementById("sEmail").value;
+            var password = document.getElementById("sPassword").value;
+
+            console.log(name+' - '+email+' - '+password);
+
+            if( email !== '' && password !== ''&& name !== ''){
+
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", "https://bulksmssch.herokuapp.com/register", true);
+                xhr.setRequestHeader('Content-Type', 'application/json');
+                xhr.responseType = 'json';
+
+                xhr.onload  = function() {
+                  var jsonResponse = xhr.response;
+
+                  console.log(""+jsonResponse.id);
+
+                  if(jsonResponse.response+'' === 'Success'){
+                    location.href = "login.html";
+                  }
+                  
+                  console.log(jsonResponse);
+                };
+
+                xhr.send(JSON.stringify({
+                    name: name,
+                    email: email,
+                    password: password
+                    
+                }));
+            }
+            else{
+                alert('some fields are empty');
+            }
+
+
+
+        }
+
+    </script>
+
+
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-app.js"></script>
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+        https://firebase.google.com/docs/web/setup#available-libraries -->
+
+    <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-analytics.js"></script>
+      
+    <script src="js/firebase.js"></script>
+  </body>
+
+</html>

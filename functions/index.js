@@ -24,9 +24,10 @@ app.use(bodyParser.json());
 
 var eventEmitter = new events.EventEmitter();
 
-eventEmitter.on('readfile', async function (res) {
-  readcsv(res);
+eventEmitter.on('readfile', async function (res,message,date) {
+  readcsv(res,message,date);
 });
+
 
 const storage = new Storage({
   projectId: "bulksmssch",
@@ -125,7 +126,7 @@ app.post('/upload', multer.single('file'), async(req, res) => {
 });
 
 
-const downloadFile = async(filename,res) => {
+const downloadFile = async(filename,res,message,date) => {
   let destFilename = './data.csv';
   const options = {
     // The path to which the file should be downloaded, e.g. "./file.txt"
@@ -139,7 +140,9 @@ const downloadFile = async(filename,res) => {
     //`gs://${bucket}/${filename} downloaded to ${destFilename}.`
   );
 
-  eventEmitter.emit('readfile',res);
+  //console.log('from DownloadFile'+message+' '+date);
+
+  eventEmitter.emit('readfile',res,message,date);
 } 
 
 app.post('/bulksms', multer.single('file'), async(req, res) => {
@@ -157,7 +160,36 @@ app.post('/bulksms', multer.single('file'), async(req, res) => {
         url: success
       });*/
 
-      downloadFile(''+file.originalname);
+      downloadFile(''+file.originalname,res);
+    }).catch((error) => {
+      console.error(error);
+    });
+  }
+  else{
+    console.log('here 2');
+  }
+});
+
+app.post('/custom_sms_scheduled', multer.single('file'), async(req, res) => {
+  console.log('Upload Image begun');
+
+  let file = req.file;
+
+  let taskid = req.body.id;
+  let message = req.body.message;
+  let date = req.body.date;
+
+  console.log(message+''+date+''+taskid);
+  
+  if (file) {
+    uploadImageToStorage(file).then((success) => {
+      /*console.log(success);
+      res.status(200).send({
+        status: 'success',
+        url: success
+      });*/
+
+      downloadFile(''+file.originalname,res,message,date);
     }).catch((error) => {
       console.error(error);
     });
@@ -171,51 +203,210 @@ app.get('/getfile', async(req,res)=>{
   downloadFile();
 });
 
-function readcsv(res){
-    //__dirname+'/file.csv'
+  function readcsv(res,message,date){
+      //__dirname+'/file.csv'
 
-    const csv = require('csv-parser')
-    const fs = require('fs')
-    const results = [];
-    
-    fs.createReadStream(__dirname+'/data.csv')
-      .pipe(csv())
-      .on('data', (data) => results.push(data))
-      .on('end', () => {
-        console.log(results[0].NAME);
-        // [
-        //   { NAME: 'Daffy Duck', AGE: '24' },
-        //   { NAME: 'Bugs Bunny', AGE: '22' }
-        // ]
+      const csv = require('csv-parser')
+      const fs = require('fs')
+      const results = [];
+      
+      fs.createReadStream(__dirname+'/data.csv')
+        .pipe(csv())
+        .on('data', (data) => results.push(data))
+        .on('end', () => {
+          //console.log(results[0].NAME);
 
-        res.sendStatus(200);
-      });
-}
+          console.log(message+' '+date);
 
-function readcsv2(file){
-  //__dirname+'/file.csv'
+          if(message === '' && date === '' || message === 'undefined' && date === 'undefined'){
+            //instant fees
 
-  const csv = require('csv-parser')
-  const fs = require('fs')
-  const results = [];
+            console.log('instant fees');
+            //sendSms(results[0].NAME,results[0].PHONE,results[0].PAID,results[0].REMAINING);
+          }
+          else if(message !== '' && date === '' || message !== 'undefined' && date === 'undefined'){
+            //send instant custom
+            console.log('instant custom');
+
+            let contacts = [];
+
+            for(let row of results){
+              //console.log(String(row.PHONE));
+              contacts.push(String(row.PHONE));
+            }
+
+            //sendBulkSms(message,contacts);
+          }
+          else if(message === '' && date !== '' || message !== 'undefined' && date !== 'undefined'){
+            //send scheduled fees
+            console.log('scheduled fees');
+            //sendSms_scheduled(results[0].NAME,results[0].PHONE,results[0].PAID,results[0].REMAINING,date);
+          }
+          else if(message !== '' && date !== '' || message !== 'undefined' && date !== 'undefined'){
+
+            //scheduled custom
+            console.log('scheduled custom');
+
+            let contacts = [];
+
+            for(let row of results){
+              //console.log(String(row.PHONE));
+              contacts.push(String(row.PHONE));
+            }
+
+            //sendBulkSms_scheduled(message,contacts,date);
+          }
+          
+          // [
+          //   { NAME: 'Daffy Duck', AGE: '24' },
+          //   { NAME: 'Bugs Bunny', AGE: '22' }
+          // ]
+
+          res.sendStatus(200);
+        });
+  }
+
+  async function writeStatus(type,comment){
+
+    var pushid = db.ref('smslogs/').push().getKey();
+    var datetime = new Date();
+    console.log(datetime);
   
-  fs.createReadStream(file)
-    .pipe(csv())
-    .on('data', (data) => results.push(data))
-    .on('end', () => {
-      console.log(results[0].NAME);
-      // [
-      //   { NAME: 'Daffy Duck', AGE: '24' },
-      //   { NAME: 'Bugs Bunny', AGE: '22' }
-      // ]
+    await db.ref('smslogs/').child(String(pushid)).set({
+        id: pushid,
+        type: type, //success or error
+        comment: comment,
+        date: datetime
+    }, async function(error) {
+      if (error) {
+        console.log(error);
+      }
     });
-}
+  }
 
-app.get('/readcsv',(req,res)=>{
+  function sendSms(name,phone,paid,remaining){
+    // SEND SMS
+    const axios = require('axios');
+    axios.get('https://sms.arkesel.com/sms/api?action=send-sms&api_key=Ok5uVUZkc0FtQjdERDk2eDg=&to='+phone+'&from=TIAIS&sms=Hello Guardian, An amount of '+
+    paid+' has been paid as School fees for '+name+'. the new outstanding balance is '+remaining+'.')
+    .then(response => console.log(response))
+    .catch(error => console.log(error));
+  }
 
-    readcsv();
+  function sendSms_scheduled(name,phone,paid,remaining,date){
 
-});
+    // SCHEDULE SMS
+    const axios = require('axios');
+    //format date to match this format: DD-MM-YYYY
+    axios.get('https://sms.arkesel.com/sms/api?action=send-sms&api_key=Ok5uVUZkc0FtQjdERDk2eDg=&to='+phone+'&from=TIAIS&sms=Hello Guardian, An amount of '+
+    paid+' has been paid as School fees for '+name+'. the new outstanding balance is '+remaining+'.&schedule='+date+' 10:00 AM')
+    .then(response => console.log(response))
+    .catch(error => console.log(error));
+
+  }
+
+  function sendBulkSms(message,contacts){
+    // SEND SMS
+
+    console.log(contacts);
+
+    const axios = require('axios');
+    const data = {"sender": "TIAIS",
+                  "message": message,
+                  "recipients": contacts};
+
+    const config = {
+    method: 'post',
+    url: 'https://sms.arkesel.com/api/v2/sms/send',
+    headers: {
+        'api-key': 'Ok5uVUZkc0FtQjdERDk2eDg='
+    },
+    data : data
+    };
+
+    axios(config)
+    .then(function (response) {
+    console.log(JSON.stringify(response.data));
+      writeStatus('success',String(response.data));
+    })
+    .catch(function (error) {
+    console.log(error);
+      writeStatus('error',String(error.data));
+    });
+  }
+
+  function sendBulkSms_scheduled(message,contacts,date){
+
+    // SCHEDULE SMS
+    const axios = require('axios');
+    const data = {"sender": "TIAIS",
+                  "message": message,
+                  "recipients": contacts,
+                  "scheduled_date": date+" 07:00 AM"};
+
+    const config = {
+      method: 'post',
+      url: 'https://sms.arkesel.com/api/v2/sms/send',
+      headers: {
+        'api-key': 'Ok5uVUZkc0FtQjdERDk2eDg=',
+      },
+      data : data
+    };
+
+    axios(config)
+    .then(function (response) {
+        console.log(JSON.stringify(response.data));
+        writeStatus('success',String(response.data));
+      })
+      .catch(function (error) {
+        console.log(error);
+        writeStatus('error',String(error.data));
+    });
+
+  }
+
+  app.post('/register',async(req,res)=>{
+    
+    var pushid = db.ref('users/').push().getKey();
+  
+    await db.ref('users/').child(String(pushid)).set({
+        id: pushid,
+        name: req.body.name,
+        email: req.body.email,
+        password: req.body.password,
+    }, async function(error) {
+      if (error) {
+        console.log(error);
+        res.sendStatus(500);
+      } else {
+        res.send({response: "Success"});
+      }
+    });
+  
+    res.send();
+  });
+  
+  app.post('/login',async(req,res)=>{
+    
+    const eventref = db.ref("users");
+    const snapshot = await eventref.once('value');
+    const value = snapshot.val();
+  
+    var data = Object.entries(value);
+  
+    var response = {response: "User not found"};
+  
+    for(let val of data){
+  
+      if((req.body.email === String(val[1].email) || req.body.phone === String(val[1].phone)) && req.body.password ===String(val[1].password)){
+        
+        response = {response: "Success"}
+  
+      }
+    }
+  
+    res.send(response);
+  });
 
 
 app.get('/sendsms',(req,res)=>{
