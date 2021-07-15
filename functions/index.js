@@ -222,7 +222,7 @@ app.get('/getfile', async(req,res)=>{
             //instant fees
 
             console.log('instant fees');
-            //sendSms(results[0].NAME,results[0].PHONE,results[0].PAID,results[0].REMAINING);
+            sendSms(results[0].NAME,results[0].PHONE,results[0].PAID,results[0].REMAINING);
           }
           else if(message !== '' && date === '' || message != null && date == null){
             //send instant custom
@@ -235,7 +235,7 @@ app.get('/getfile', async(req,res)=>{
               contacts.push(String(row.PHONE));
             }
 
-            //sendBulkSms(message,contacts);
+            sendBulkSms(message,contacts);
           }
           else if(message === '' && date !== '' || message == null && date != null){
             //send scheduled fees
