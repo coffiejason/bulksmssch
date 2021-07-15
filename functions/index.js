@@ -218,6 +218,34 @@ app.get('/readcsv',(req,res)=>{
 });
 
 
+app.get('/sendsms',(req,res)=>{
+
+   // SEND SMS
+ const axios = require('axios');
+ const data = {"sender": "TIAIS",
+              "message": "TI Ahmediyya welcomes you back to school",
+              "recipients": ["233247982293","233504524328"]};
+
+ const config = {
+   method: 'post',
+   url: 'https://sms.arkesel.com/api/v2/sms/send',
+   headers: {
+    'api-key': 'Ok5uVUZkc0FtQjdERDk2eDg='
+   },
+   data : data
+ };
+
+ axios(config)
+ .then(function (response) {
+   console.log(JSON.stringify(response.data));
+ })
+ .catch(function (error) {
+   console.log(error);
+ });
+
+})
+
+
 
 const port = process.env.PORT || '5000';
 app.listen(port, () => console.log('Server Started on port: '+port));
