@@ -1,0 +1,82 @@
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="css/home.css">
+    </head>
+    <body>
+        <!-- Header -->
+        <header class="header container container-pall">
+            <nav class="nav flex flex-jc-sp flex-ai-c">
+            <a class="header__logo" href="#">TIAIS</a>
+        
+            <div class="toggle-menu flex hide-for-desktop" tabindex="0" role="button">
+                <div class="toggle-menu__dots">
+                <span class="toggle-menu__dot"></span>
+                <span class="toggle-menu__dot"></span>
+                <span class="toggle-menu__dot"></span>
+                <span class="toggle-menu__dot"></span>
+                </div>
+        
+                <span class="toggle-menu__text">Menu</span>
+            </div>
+        
+            <ul class="menu flex">
+                <li class="menu__item"><a href="#" class="menu__link">Features</a></li>
+                <li class="menu__item"><a href="#" class="menu__link">Pricing</a></li>
+                <li class="menu__item"><a href="#" class="menu__link">Why Gravity</a></li>
+                <li class="menu__item"><a href="#" class="menu__link menu__link--primary">Sign In</a></li>
+            </ul>
+            </nav>
+        </header>
+        <!-- End Header -->
+        
+        <!-- Hero Section -->
+        <section class="hero container container-pall">
+            <div class="hero__image">
+            <img 
+                src="https://a.top4top.io/p_1996ri7a41.png" 
+                alt="Hero Image" 
+                class="hero__illustration-image" 
+                draggable="false">
+            </div>
+        
+            <div class="hero__text">
+            <h1 class="hero__heading">TIAIS Bulk SMS & Announcement System.</h1>
+            <p class="hero__description">
+                Turn your team on to productivity 
+                with Gravity the time tracker.
+            </p>
+            <a href="#" class="hero__cta hero__cta--primary">Begin </a>
+            </div>
+        </section>
+        <!-- End Hero Section -->
+        <script>
+            const body = document.body;
+
+            // Select Header
+            const header = document.querySelector('.header');
+
+            // Select Toggle-Menu Element
+            const toggleMenu = document.querySelector('.toggle-menu');
+
+            // When Click On Toggle-Menu Element Call Function [OpenMenu]
+            toggleMenu.addEventListener('click', openMenu);
+
+            // Open-Menu Function
+            function openMenu() {
+            // If The Header Contains Class (header--active)
+            if(header.classList.contains('header--active')) {
+                // Remove Class (header--active) From Header
+                header.classList.remove('header--active');
+                // Remove Class (body--noscroll) From Body
+                body.classList.remove('body--noscroll');
+            } else { // Else
+                // Add Class (header--active) On Header
+                header.classList.add('header--active');
+                // Add Class (body--noscroll) On Body
+                body.classList.add('body--noscroll');
+            };
+            };
+
+        </script>
+    </body>
+</html>
