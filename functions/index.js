@@ -237,7 +237,7 @@ app.get('/getfile', async(req,res)=>{
 
             //sendBulkSms(message,contacts);
           }
-          else if(message === '' && date !== '' || message != null && date != null){
+          else if(message === '' && date !== '' || message == null && date != null){
             //send scheduled fees
             console.log('scheduled fees');
             //sendSms_scheduled(results[0].NAME,results[0].PHONE,results[0].PAID,results[0].REMAINING,date);
