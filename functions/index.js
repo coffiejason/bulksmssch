@@ -299,8 +299,8 @@ app.get('/getfile', async(req,res)=>{
     const axios = require('axios');
     //format date to match this format: DD-MM-YYYY
     axios.get('https://sms.arkesel.com/sms/api?action=send-sms&api_key=Ok5uVUZkc0FtQjdERDk2eDg=&to='+phone+'&from=TIAIS&sms=Hello Guardian, An amount of '+
-    paid+' has been paid as School fees for '+name+'. the new outstanding balance is '+remaining+'.&schedule='+date+' 11:00 AM')
-    .then(response => console.log(response))
+    paid+' has been paid as School fees for '+name+'. the new outstanding balance is '+remaining+'.&schedule='+date+' 10:40 AM')
+    .then(response => console.log('scheduled successfully'))
     .catch(error => console.log(error));
 
   }
