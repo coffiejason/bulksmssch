@@ -26,10 +26,10 @@
           <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
       </label>
       <ul>
-          <li><a href="index.html" >School Fees Reciepts</a></li>
+          <li><a href="fees.html" >School Fees Reciepts</a></li>
           <li><a href="custom.html">Custom Message</a></li>
           <li><a href="#" class="active">SMS Logs</a></li>
-          <li><a href="#">Contact Us</a></li>
+          <a class="logout" href="index.html" ><strong>Log Out</strong></a>
       </ul>
   </nav>
 
@@ -38,6 +38,44 @@
 
     <script>
         document.getElementById("tasks").innerHTML = ""+createLi('200 out of 200 messages are yet to be sent','22/01/2021','Scheduled for: 10:00 AM 12/07/2021', 'shagsj');
+
+        fetch('https://momoproxy.herokuapp.com/getvendor/'+lat+'/'+lng)
+        .then(response => response.json())
+        .then(data => load(data));
+
+        function load(data){
+          li = "";
+
+          console.log(data.length);
+
+          if(data.length == 0){
+
+            var x = document.getElementById("progressbar");
+              if (x.style.display === "block") {
+                x.style.display = "none";
+              }
+
+            var x = document.getElementById("no_vendor");
+              if (x.style.display === "none") {
+                x.style.display = "block";
+              }
+
+          }
+          else{
+
+            for(i = 0; i<data.length; i++){
+            li += ""+createLi(data[i].location,data[i].comment,data[i].message,data[i].hisname,data[i].id); //edit this to meet new api
+            }
+
+            document.getElementById("tasks").innerHTML = li;
+
+            var x = document.getElementById("progressbar");
+              if (x.style.display === "block") {
+                x.style.display = "none";
+              }
+
+          }
+        }
 
         function createLi(location, time, message, hisname, tid){
           let Li = '<a href="contact_vendor.html?tid='+tid+'" class="list-group-item list-group-item-action" aria-current="true" style="margin: 1%;">'+

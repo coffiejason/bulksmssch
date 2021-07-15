@@ -72,6 +72,20 @@ ul li a.active {
     display: none;
 }
 
+.logout{
+    background: rgb(138, 80, 92);
+    text-decoration: none;
+    color: #8291A5;
+    padding: 8px 30px;
+    border-radius: 7px;
+    transition: all .3s ease;
+}
+
+.logout:hover {
+    color: #FFF;
+    background: #d10d0d;
+}
+
 @media screen and (max-width: 768px) {
     nav {
         border-bottom: 1px solid #455468;
@@ -105,5 +119,9 @@ ul li a.active {
 
     #checkbox:checked~ul {
         display: block;
+    }
+
+    .logout{
+        padding: 10px 15px;
     }
 }

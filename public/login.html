@@ -41,7 +41,8 @@
             
             <button id="loginBtn" style="display: block;" onclick="login()">login</button>
             <progress class="pure-material-progress-circular" id="progressbar2" style="margin-top: 2%; margin-left: 100px; width: 40px; height: 40px; display: none; position: relative;"></progress>
-            <p class="message">Not registered? <a href="#">Create an account</a></p>
+            <div id="invalid_credentials" style="display: none; background-color: rgba(248, 215, 218, 1); border-color: rgba(220, 53, 69, 1); color: rgba(114, 28, 36,1);   padding: 12px 16px;   border-radius: 4px;   border-style: solid;   border-width: 1px;   margin-top: 12px;   font-size: 16px;" role="alert"><strong>Invalid Credentials</strong></div>
+            <!--<p class="message">Not registered? <a href="#">Create an account</a></p>-->
             </form>
         </div>
     </div>
@@ -64,6 +65,12 @@
         function login(){
             var email = document.getElementById("email").value;
             var password = document.getElementById("password").value;
+
+            
+            var x = document.getElementById("invalid_credentials");
+                    if (x.style.display === "block") {
+                    x.style.display = "none";
+            }
 
             console.log(email+' - '+password);
 
@@ -125,7 +132,26 @@
                   var jsonResponse = xhr.response;
 
                   if(jsonResponse.response+'' === 'Success'){
-                    location.href = "index.html";
+                    location.href = "fees.html";
+                  }
+                  else{
+                    //invalid_credentials
+                    
+                    var x = document.getElementById("loginBtn");
+                    if (x.style.display === "none") {
+                    x.style.display = "block";
+                    }
+
+                    var x = document.getElementById("invalid_credentials");
+                    if (x.style.display === "none") {
+                    x.style.display = "block";
+                    }
+
+                    var x = document.getElementById("progressbar2");
+                    if (x.style.display === "block") {
+                    x.style.display = "none";
+                    }
+
                   }
                   
                   console.log(jsonResponse);

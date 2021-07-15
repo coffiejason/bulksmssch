@@ -3,9 +3,7 @@
 <html lang="en">
   <head>
     <link rel="stylesheet" type="text/css" href="css/progressbar.css">
-    <link rel="stylesheet" type="text/css" href="css/alert.css">
     <link rel="stylesheet" type="text/css" href="css/date.css">
-    <link rel="stylesheet" type="text/css" href="css/textarea.css">
     <link rel="stylesheet" type="text/css" href="css/switch.css">
     <link rel="stylesheet" type="text/css" href="css/navbar.css">
     <link rel="stylesheet" type="text/css" href="css/input.css">
@@ -28,27 +26,15 @@
           <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
       </label>
       <ul>
-          <li><a href="fees.html">School Fees Reciepts</a></li>
-          <li><a href="#" class="active">Custom Message</a></li>
+          <li><a href="#" class="active">School Fees Reciepts</a></li>
+          <li><a href="custom.html">Custom Message</a></li>
           <li><a href="logs.html">SMS Logs</a></li>
           <a class="logout" href="index.html" ><strong>Log Out</strong></a>
+
       </ul>
   </nav>
-    <div class="alert hide">
-      <span class="fas fa-exclamation-circle"></span>
-      <span class="msg">Warning: An empty message cannot be sent</span>
-      <div class="close-btn">
-        <span class="fas fa-times"></span>
-      </div>
-    </div>
 
     <div class="file-upload">
-        <div class="center">
-            <div class="container">
-                <textarea required id="text-area" name="message" placeholder="message..."></textarea>
-            </div>
-        </div>
-
       <div id="content" class="content" style="display: block;">
         <label class="text">Schedule:</label>
         <label class="switch">
@@ -56,28 +42,23 @@
           <span class="slider round"></span>
         </label>
       </div>
-
       <div id="datepickerDiv" style="display: none;">    
         <input placeholder="Select your date" type="text" name="checkIn" id="datepicker" value="" class="calendar"><i class="fas fa-calendar-check icon"></i>
       </div>
       <div id="choosefiletab" class="file-upload-select" style="display: block;">
         <div class="file-select-button" >Choose File</div>
         <div class="file-select-name">No file chosen...</div> 
-        <input type="file" accept=".csv" name="file-upload-input" id="file-upload-input" onclick="checkMessage()">
-      </div>
-
-      <div id="filenotuploaded" style="display: none; background-color: rgba(248, 215, 218, 1); border-color: rgba(220, 53, 69, 1); color: rgba(114, 28, 36,1); width: 100%;   padding: 12px 16px;   border-radius: 4px;   border-style: solid;   border-width: 1px;   margin-top: 12px;   font-size: 16px;" role="alert">File was not uploaded because <strong>Message was empty</strong>.<br> Type a message and choose the file again</div>
-
-      <br><img id="myImg" style="width: 100px; margin-top: 10px; display: none;" src="#">
-
-      <progress class="pure-material-progress-circular" id="progressbar" style="margin-top: 2%; width: 40px; height: 40px; display: none;"></progress>
-      <div id="upload_div" style="display: none;" onclick="uploadImg()">
-        <img src="images/photo.png" style="width: 50px; margin: 1%;"/>
+        <input type="file" accept=".csv" name="file-upload-input" id="file-upload-input">
       </div>
     </div>
     
         
+    <br><img id="myImg" style="width: 100px; margin-top: 10px; display: none;" src="#">
 
+    <progress class="pure-material-progress-circular" id="progressbar" style="margin-top: 2%; width: 40px; height: 40px; display: none;"></progress>
+    <div id="upload_div" style="display: none;" onclick="uploadImg()">
+      <img src="images/photo.png" style="width: 50px; margin: 1%;"/>
+    </div>
     <script>
 
       let fileInput = document.getElementById("file-upload-input");
@@ -115,22 +96,7 @@
                   x.style.display = "block";
                 }*/
 
-                if(document.getElementById("text-area").value === ''){
-                  var x = document.getElementById("filenotuploaded");
-                  if (x.style.display === "none") {
-                    x.style.display = "block";
-                  }
-                }
-                else{
-                  uploadImg();
-
-                  var x = document.getElementById("filenotuploaded");
-                  if (x.style.display === "block") {
-                    x.style.display = "none";
-                  }
-                }
-
-                
+                uploadImg();
             }
         });
       });
@@ -150,15 +116,14 @@
         }
 
           var data = new FormData();
+
           var datepicked = document.getElementById("datepicker").value;
-          var message = ''+document.getElementById("text-area").value;
 
           data.append("file", fileInput.files[0]);
           data.append("id", "test");
-          data.append("message",""+message);
 
           if(datepicked !== ''){
-            data.append("date",''+datepicked);
+            data.append("date",""+datepicked);
           }
           
           var xhr = new XMLHttpRequest();
@@ -238,7 +203,7 @@
       function datepicker(){
             jQuery(document).ready(function () {
             jQuery('#datepicker').datepicker({
-                dateFormat: 'yy-mm-dd',
+                dateFormat: 'dd-mm-yy',
                 startDate: '+1d'
             });
         });
@@ -260,36 +225,21 @@
               if (x.style.display === "none") {
                 x.style.display = "block";
           }
+
+
         }
         else if(schedule == false){
           var x = document.getElementById("datepickerDiv");
               if (x.style.display === "block") {
                 x.style.display = "none";
           }
+
           document.getElementById("datepicker").value = '';
+
+
         }
-      }
+        
 
-      function checkMessage(){
-        if(document.getElementById("text-area").value === ''){
-           showAlert();
-        }
-
-      }
-
-      function showAlert(){
-        $('.alert').addClass("show");
-          $('.alert').removeClass("hide");
-          $('.alert').addClass("showAlert");
-          setTimeout(function(){
-            $('.alert').removeClass("show");
-            $('.alert').addClass("hide");
-          },5000);
-
-        $('.close-btn').click(function(){
-          $('.alert').removeClass("show");
-          $('.alert').addClass("hide");
-        });
       }
 
       function showHide(){
