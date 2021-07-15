@@ -218,7 +218,7 @@ app.get('/getfile', async(req,res)=>{
 
           console.log(message+' '+date);
 
-          if(message === '' && date === '' || message === 'undefined' && date === 'undefined'){
+          if(message === '' && date === '' || message == null && date == null){
             //instant fees
 
             console.log('instant fees');
