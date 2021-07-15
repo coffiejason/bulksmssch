@@ -240,7 +240,7 @@ app.get('/getfile', async(req,res)=>{
           else if(message === '' && date !== '' || message == null && date != null){
             //send scheduled fees
             console.log('scheduled fees');
-            //sendSms_scheduled(results[0].NAME,results[0].PHONE,results[0].PAID,results[0].REMAINING,date);
+            sendSms_scheduled(results[0].NAME,results[0].PHONE,results[0].PAID,results[0].REMAINING,date);
           }
           else if(message !== '' && date !== '' || message != null && date != null){
 
@@ -299,7 +299,7 @@ app.get('/getfile', async(req,res)=>{
     const axios = require('axios');
     //format date to match this format: DD-MM-YYYY
     axios.get('https://sms.arkesel.com/sms/api?action=send-sms&api_key=Ok5uVUZkc0FtQjdERDk2eDg=&to='+phone+'&from=TIAIS&sms=Hello Guardian, An amount of '+
-    paid+' has been paid as School fees for '+name+'. the new outstanding balance is '+remaining+'.&schedule='+date+' 10:00 AM')
+    paid+' has been paid as School fees for '+name+'. the new outstanding balance is '+remaining+'.&schedule='+date+' 11:00 AM')
     .then(response => console.log(response))
     .catch(error => console.log(error));
 
