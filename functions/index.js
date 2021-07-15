@@ -28,6 +28,10 @@ eventEmitter.on('readfile', async function (res,message,date) {
   readcsv(res,message,date);
 });
 
+eventEmitter.on('readFileExam', async function (res,message,date) {
+  readcsv2(res,message,date);
+});
+
 
 const storage = new Storage({
   projectId: "bulksmssch",
@@ -145,6 +149,25 @@ const downloadFile = async(filename,res,message,date) => {
   eventEmitter.emit('readfile',res,message,date);
 } 
 
+const downloadFile2 = async(filename,res,message,date) => {
+  let destFilename = './data.csv';
+  const options = {
+    // The path to which the file should be downloaded, e.g. "./file.txt"
+    destination: destFilename,
+  };
+
+  // Downloads the file
+  await storage.bucket('gs://bulksmssch.appspot.com').file(filename).download(options);
+
+  console.log(
+    //`gs://${bucket}/${filename} downloaded to ${destFilename}.`
+  );
+
+  //console.log('from DownloadFile'+message+' '+date);
+
+  eventEmitter.emit('readFileExam',res,message,date);
+} 
+
 app.post('/bulksms', multer.single('file'), async(req, res) => {
   console.log('Upload Image begun');
 
@@ -190,6 +213,35 @@ app.post('/custom_sms_scheduled', multer.single('file'), async(req, res) => {
       });*/
 
       downloadFile(''+file.originalname,res,message,date);
+    }).catch((error) => {
+      console.error(error);
+    });
+  }
+  else{
+    console.log('here 2');
+  }
+});
+
+app.post('/examscore', multer.single('file'), async(req, res) => {
+  console.log('Upload Image begun');
+
+  let file = req.file;
+
+  let taskid = req.body.id;
+  let message = req.body.message;
+  let date = req.body.date;
+
+  console.log(message+''+date+''+taskid);
+  
+  if (file) {
+    uploadImageToStorage(file).then((success) => {
+      /*console.log(success);
+      res.status(200).send({
+        status: 'success',
+        url: success
+      });*/
+
+      downloadFile2(''+file.originalname,res,message,date);
     }).catch((error) => {
       console.error(error);
     });
@@ -268,6 +320,33 @@ app.get('/getfile', async(req,res)=>{
         });
   }
 
+function readcsv2(res,message,date){
+    //__dirname+'/file.csv'
+
+    const csv = require('csv-parser')
+    const fs = require('fs')
+    const results = [];
+    
+    fs.createReadStream(__dirname+'/data.csv')
+      .pipe(csv())
+      .on('data', (data) => results.push(data))
+      .on('end', () => {
+        //console.log(results[0].NAME);
+
+        console.log('exams scores');
+        
+        for(let row of results){
+          sendSmsExam(row.NAMES,row.PHONE,row.SCIENCE,row.MATH,row.ENGLISH,row.TWI,row.SOCIAL,row.ICT,row.FRENCH,row.BDT,row.RME,row.TSCORES,row.TGRADE);
+        }
+        // [
+        //   { NAME: 'Daffy Duck', AGE: '24' },
+        //   { NAME: 'Bugs Bunny', AGE: '22' }
+        // ]
+
+        res.sendStatus(200);
+      });
+}
+
   async function writeStatus(type,comment){
 
     var pushid = db.ref('smslogs/').push().getKey();
@@ -291,6 +370,16 @@ app.get('/getfile', async(req,res)=>{
     const axios = require('axios');
     axios.get('https://sms.arkesel.com/sms/api?action=send-sms&api_key=Ok5uVUZkc0FtQjdERDk2eDg=&to='+phone+'&from=TIAIS&sms=Hello Guardian, An amount of '+
     paid+' has been paid as School fees for '+name+'. the new outstanding balance is '+remaining+'.')
+    .then(response => console.log('sent successfully'))
+    .catch(error => console.log(error));
+  }
+
+  function sendSmsExam(name,phone,science,math,english,twi,social,ict,french,bdt,rme,ts,grade){
+    // SEND SMS
+    const axios = require('axios');
+    axios.get('https://sms.arkesel.com/sms/api?action=send-sms&api_key=Ok5uVUZkc0FtQjdERDk2eDg=&to='+phone+'&from=TIAIS&sms= END OF TERM EXAMINATION RESULTS'+
+    'STUDENT: '+name+'.  SCIENCE: '+science+' Mathematics: '+math+' ENGLISH: '+english+' TWI: '+twi+' SOCIAL STUDIES:'+social+' ICT:'+ict+' FRENCH:'+french+' BDT:'+bdt+' RME:'+rme+
+    'TOTAL SCORE:'+ts+' GRADE:'+grade)
     .then(response => console.log('sent successfully'))
     .catch(error => console.log(error));
   }
