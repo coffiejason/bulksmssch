@@ -308,7 +308,7 @@ app.get('/getfile', async(req,res)=>{
               contacts.push(String(row.PHONE));
             }
 
-            //sendBulkSms_scheduled(message,contacts,date);
+            sendBulkSms_scheduled(message,contacts,date);
           }
           
           // [
@@ -418,7 +418,7 @@ function readcsv2(res,message,date){
     axios(config)
     .then(function (response) {
     console.log(JSON.stringify(response.data));
-      writeStatus('success',String(response.data));
+      writeStatus('success',String(response.data.length));
     })
     .catch(function (error) {
     console.log(error);
