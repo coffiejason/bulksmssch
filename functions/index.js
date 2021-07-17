@@ -399,7 +399,7 @@ function readcsv2(res,message,date){
   function sendBulkSms(message,contacts){
     // SEND SMS
 
-    console.log(contacts);
+    //console.log(contacts);
 
     const axios = require('axios');
     const data = {"sender": "TIAIS",
@@ -417,7 +417,7 @@ function readcsv2(res,message,date){
 
     axios(config)
     .then(function (response) {
-    console.log(JSON.stringify(response.data));
+    //console.log(JSON.stringify(response.data));
       writeStatus('success',String(response.data.length));
     })
     .catch(function (error) {
