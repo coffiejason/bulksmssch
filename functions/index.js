@@ -417,7 +417,7 @@ function readcsv2(res,message,date){
 
     axios(config)
     .then(function (response) {
-    //console.log(JSON.stringify(response.data));
+    console.log(JSON.stringify(response.data[0]));
       writeStatus('success',String(response.data.length));
     })
     .catch(function (error) {
