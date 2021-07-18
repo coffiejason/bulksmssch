@@ -274,11 +274,14 @@ app.get('/getfile', async(req,res)=>{
             //instant fees
 
             console.log('instant fees');
+            let count = 0;
             for(let row of results){
               sendSms(row.NAME,row.PHONE,row.PAID,row.REMAINING)
-              .then(value => console.log(value))
+              .then(value => count++)
               .catch(error => console.log(error));
             }
+
+            writeStatus('success',count,results.length,'');
           }
           else if(message !== '' && date === '' || message != null && date == null){
             //send instant custom
