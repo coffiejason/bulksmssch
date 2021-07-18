@@ -275,7 +275,9 @@ app.get('/getfile', async(req,res)=>{
 
             console.log('instant fees');
             for(let row of results){
-              sendSms(row.NAME,row.PHONE,row.PAID,row.REMAINING);
+              sendSms(row.NAME,row.PHONE,row.PAID,row.REMAINING)
+              .then(value => console.log(value))
+              .catch(error => console.log(error));
             }
           }
           else if(message !== '' && date === '' || message != null && date == null){
@@ -369,11 +371,14 @@ function readcsv2(res,message,date){
 
   function sendSms(name,phone,paid,remaining){
     // SEND SMS
-    const axios = require('axios');
-    axios.get('https://sms.arkesel.com/sms/api?action=send-sms&api_key=Ok5uVUZkc0FtQjdERDk2eDg=&to='+phone+'&from=TIAIS&sms=Hello Guardian, An amount of '+
-    paid+' has been paid as School fees for '+name+'. the new outstanding balance is '+remaining+'.')
-    .then(response => console.log('sent successfully'))
-    .catch(error => console.log(error));
+
+    return new Promise((resolve, reject) => {
+      const axios = require('axios');
+      axios.get('https://sms.arkesel.com/sms/api?action=send-sms&api_key=Ok5uVUZkc0FtQjdERDk2eDg=&to='+phone+'&from=TIAIS&sms=Hello Guardian, An amount of '+
+      paid+' has been paid as School fees for '+name+'. the new outstanding balance is '+remaining+'.')
+      .then(response => resolve('success'))
+      .catch(error => reject('error'));
+    });
   }
 
   function sendSmsExam(name,phone,science,math,english,twi,social,ict,french,bdt,rme,ts,grade){
@@ -429,8 +434,6 @@ function readcsv2(res,message,date){
   }
 
   function sendBulkSms_scheduled(message,contacts,date){
-
-    console.log(date);
 
     // SCHEDULE SMS
     const axios = require('axios');
