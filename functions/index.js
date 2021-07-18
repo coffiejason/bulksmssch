@@ -347,7 +347,7 @@ function readcsv2(res,message,date){
       });
 }
 
-  async function writeStatus(type,comment){
+  async function writeStatus(type,sent,total,reason){
 
     var pushid = db.ref('smslogs/').push().getKey();
     var datetime = new Date();
@@ -356,7 +356,9 @@ function readcsv2(res,message,date){
     await db.ref('smslogs/').child(String(pushid)).set({
         id: pushid,
         type: type, //success or error
-        comment: comment,
+        sent: sent,
+        total: total,
+        reason: reason,
         date: datetime
     }, async function(error) {
       if (error) {
@@ -418,11 +420,11 @@ function readcsv2(res,message,date){
     axios(config)
     .then(function (response) {
     console.log(JSON.stringify(response.data.data));
-      writeStatus('success',String(response.data.data.length));
+      writeStatus('success',String(response.data.data.length),String(contacts.length));
     })
     .catch(function (error) {
     console.log(error);
-      writeStatus('error',String(error.data));
+      writeStatus('error',String(0),String(contacts.length),String(error.message));
     });
   }
 
@@ -447,11 +449,11 @@ function readcsv2(res,message,date){
     axios(config)
     .then(function (response) {
         console.log(JSON.stringify(response.data));
-        writeStatus('success',String(response.data));
+        writeStatus('success',String(response.data.data.length),String(contacts.length),'scheduled');
       })
       .catch(function (error) {
         console.log(error);
-        writeStatus('error',String(error.data));
+        writeStatus('error',String(0),String(contacts.length),String(error.message));
     });
 
   }
