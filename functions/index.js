@@ -405,7 +405,7 @@ function readcsv2(res,message,date){
 
     const axios = require('axios');
     const data = {"sender": "TIAIS",
-                  "message": "",
+                  "message": message,
                   "recipients": contacts};
 
     const config = {
