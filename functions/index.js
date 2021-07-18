@@ -430,6 +430,8 @@ function readcsv2(res,message,date){
 
   function sendBulkSms_scheduled(message,contacts,date){
 
+    console.log(date);
+
     // SCHEDULE SMS
     const axios = require('axios');
     const data = {"sender": "TIAIS",
