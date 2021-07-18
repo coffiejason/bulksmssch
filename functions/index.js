@@ -286,7 +286,7 @@ app.get('/getfile', async(req,res)=>{
               .catch(error => console.log(error));
 
               count2++;
-              console.log(count2);
+              console.log(count);
               if(count2 == results.length){
                 writeStatus('success',count,results.length,'');
               }
