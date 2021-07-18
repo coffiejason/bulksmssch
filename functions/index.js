@@ -276,20 +276,18 @@ app.get('/getfile', async(req,res)=>{
             console.log('instant fees');
             let count = 0;
             let count2 = 0;
-            function addCount(){
+            function addCount(max){
               count++;
-              //console.log(count);
+              if(count2 == max){
+                writeStatus('success',count,results.length,'');
+              }
+              
             }
             for(let row of results){
               sendSms(row.NAME,row.PHONE,row.PAID,row.REMAINING)
-              .then(value => addCount())
+              .then(value => addCount(results.length))
               .catch(error => console.log(error));
-
-              count2++;
-              console.log(count);
-              if(count2 == results.length){
-                writeStatus('success',count,results.length,'');
-              }
+              count2++
             }
           }
           else if(message !== '' && date === '' || message != null && date == null){
