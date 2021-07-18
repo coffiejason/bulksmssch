@@ -275,13 +275,17 @@ app.get('/getfile', async(req,res)=>{
 
             console.log('instant fees');
             let count = 0;
+            function addCount(){
+              count++;
+              console.log(count);
+            }
             for(let row of results){
               sendSms(row.NAME,row.PHONE,row.PAID,row.REMAINING)
-              .then(value => count++)
+              .then(value => addCount())
               .catch(error => console.log(error));
             }
 
-            writeStatus('success',count,results.length,'');
+            writeStatus('success',count,results.length,'')
           }
           else if(message !== '' && date === '' || message != null && date == null){
             //send instant custom
