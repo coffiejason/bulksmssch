@@ -420,7 +420,7 @@ function readcsv2(res,message,date){
     axios(config)
     .then(function (response) {
     console.log(JSON.stringify(response.data.data));
-      writeStatus('success',String(response.data.data.length),String(contacts.length));
+      writeStatus('success',String(response.data.data.length),String(contacts.length),'');
     })
     .catch(function (error) {
     console.log(error);
