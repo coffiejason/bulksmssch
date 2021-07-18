@@ -278,7 +278,8 @@ app.get('/getfile', async(req,res)=>{
             let count2 = 0;
             function addCount(max){
               count++;
-              if(count2 == max){
+              
+              if(count == max){
                 writeStatus('success',count,results.length,'');
               }
               
