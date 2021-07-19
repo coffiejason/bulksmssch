@@ -525,6 +525,40 @@ function readcsv2(res,message,date){
     res.send(response);
   });
 
+  app.get('/smslogs/', async(req,res)=>{
+
+    const eventref = db.ref("smslogs");
+    const snapshot = await eventref.once('value');
+    const value = snapshot.val();
+  
+    var data = Object.entries(value);
+  
+    let response = {};
+  
+    var responseArr = [];
+  
+    for(let val of data){
+
+      response = {
+        id: String(val[1].id),
+        date: String(val[1].date),
+        reason: String(val[1].reason),
+        sent: String(val[1].sent),
+        time: String(val[1].time),
+        total: String(val[1].time),
+        type: String(val[1].time)
+      }
+  
+      if(response.id != null){
+        responseArr.push(response);
+      }
+      
+      response = {};
+    }
+  
+    res.send(responseArr);
+  });
+
 
 app.get('/sendsms',(req,res)=>{
 
