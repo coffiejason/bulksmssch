@@ -22,6 +22,15 @@ app.use(express.urlencoded({extended: true}));
 app.use(cors());
 app.use(bodyParser.json());
 
+var dateObj = new Date();
+var month = dateObj.getUTCMonth() + 1; //months from 1-12
+var day = dateObj.getUTCDate();
+var year = dateObj.getUTCFullYear();
+
+var current_hour =  dateObj.getHours();
+var current_minutes = dateObj.getMinutes();
+var current_seconds =  dateObj.getSeconds();
+
 var eventEmitter = new events.EventEmitter();
 
 eventEmitter.on('readfile', async function (res,message,date) {
@@ -363,8 +372,6 @@ function readcsv2(res,message,date){
   async function writeStatus(type,sent,total,reason){
 
     var pushid = db.ref('smslogs/').push().getKey();
-    var datetime = new Date();
-    console.log(datetime);
   
     await db.ref('smslogs/').child(String(pushid)).set({
         id: pushid,
@@ -372,7 +379,8 @@ function readcsv2(res,message,date){
         sent: sent,
         total: total,
         reason: reason,
-        date: datetime
+        date: day+'-'+month+'-'+year,
+        time: current_hour+':'+current_minutes
     }, async function(error) {
       if (error) {
         console.log(error);
