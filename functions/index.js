@@ -545,7 +545,7 @@ function readcsv2(res,message,date){
         reason: String(val[1].reason),
         sent: String(val[1].sent),
         time: String(val[1].time),
-        total: String(val[1].time),
+        total: String(val[1].total),
         type: String(val[1].time)
       }
   
