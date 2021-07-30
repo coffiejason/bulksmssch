@@ -563,30 +563,30 @@ function readcsv2(res,message,date){
 app.get('/sendsms',(req,res)=>{
 
    // SEND SMS
- const axios = require('axios');
- const data = {"sender": "Pantang Community Water",
-              "message": "Good day, This is a bulk messaging test by pantang community water to rollout bill distribution via SMS.",
-              "recipients": ["233504524328","233504524328"]};
 
- const config = {
-   method: 'post',
-   url: 'https://sms.arkesel.com/api/v2/sms/send',
-   headers: {
-    'api-key': 'Ok5uVUZkc0FtQjdERDk2eDg='
-   },
-   data : data
- };
+    const axios = require('axios');
+    const data = {"sender": "PCWSDB",
+                  "message": "Test message",
+                  "recipients": ["233504524328","233504524328"]};
 
- axios(config)
- .then(function (response) {
-   console.log(JSON.stringify(response.data));
-   res.sendStatus(200);
- })
- .catch(function (error) {
-   console.log(error);
-   res.sendStatus(500);
- });
+    const config = {
+    method: 'post',
+    url: 'https://sms.arkesel.com/api/v2/sms/send',
+    headers: {
+        'api-key': 'Ok5uVUZkc0FtQjdERDk2eDg='
+    },
+    data : data
+    };
 
+    axios(config)
+    .then(function (response) {
+    console.log(JSON.stringify(response.data.data));
+    res.sendStatus(200);
+    })
+    .catch(function (error) {
+    console.log(error);
+    res.sendStatus(500);
+    });
 })
 
 
