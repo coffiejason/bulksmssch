@@ -565,7 +565,7 @@ app.get('/sendsms',(req,res)=>{
    // SEND SMS
 
    const axios = require('axios');
-   axios.get('https://sms.arkesel.com/sms/api?action=send-sms&api_key=Ok5uVUZkc0FtQjdERDk2eDg=&to=233504524328&from=MOMOPROXY&sms=You have a new transaction request')
+   axios.get('https://sms.arkesel.com/sms/api?action=send-sms&api_key=Ok5uVUZkc0FtQjdERDk2eDg=&to=233504524328&from=TIAIS&sms=You have a new transaction request')
    .then(response => {
     console.log('sent successfully');
     res.sendStatus(200)
