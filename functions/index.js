@@ -564,9 +564,9 @@ app.get('/sendsms',(req,res)=>{
 
    // SEND SMS
  const axios = require('axios');
- const data = {"sender": "TIAIS",
-              "message": "TI Ahmediyya welcomes you back to school",
-              "recipients": ["233247982293","233504524328"]};
+ const data = {"sender": "Pantang Water and Sanitation Development Board",
+              "message": "Good day, This is a bulk messaging test by pantang community water to rollout bill distribution via SMS.",
+              "recipients": ["233243767890","233504524328"]};
 
  const config = {
    method: 'post',
