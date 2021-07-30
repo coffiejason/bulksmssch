@@ -564,7 +564,7 @@ app.get('/sendsms',(req,res)=>{
 
    // SEND SMS
  const axios = require('axios');
- const data = {"sender": "Pantang Water and Sanitation Development Board",
+ const data = {"sender": "Pantang Community Water",
               "message": "Good day, This is a bulk messaging test by pantang community water to rollout bill distribution via SMS.",
               "recipients": ["233504524328","233504524328"]};
 
@@ -580,9 +580,11 @@ app.get('/sendsms',(req,res)=>{
  axios(config)
  .then(function (response) {
    console.log(JSON.stringify(response.data));
+   res.sendStatus(200);
  })
  .catch(function (error) {
    console.log(error);
+   res.sendStatus(500);
  });
 
 })
