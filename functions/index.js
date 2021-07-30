@@ -567,7 +567,7 @@ app.get('/sendsms',(req,res)=>{
     const axios = require('axios');
     const data = {"sender": "PCWSDB",
                   "message": "This is a test by Pantang Community Water for bill distribution via sms",
-                  "recipients": ["233504524328","233504524328"]};
+                  "recipients": ["233504524328","233504524328","233244774302","233244361839"]};
 
     const config = {
     method: 'post',
