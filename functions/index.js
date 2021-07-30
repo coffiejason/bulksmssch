@@ -22,6 +22,15 @@ app.use(express.urlencoded({extended: true}));
 app.use(cors());
 app.use(bodyParser.json());
 
+var dateObj = new Date();
+var month = dateObj.getUTCMonth() + 1; //months from 1-12
+var day = dateObj.getUTCDate();
+var year = dateObj.getUTCFullYear();
+
+var current_hour =  dateObj.getHours();
+var current_minutes = dateObj.getMinutes();
+var current_seconds =  dateObj.getSeconds();
+
 var eventEmitter = new events.EventEmitter();
 
 eventEmitter.on('readfile', async function (res,message,date) {
@@ -274,8 +283,21 @@ app.get('/getfile', async(req,res)=>{
             //instant fees
 
             console.log('instant fees');
+            let count = 0;
+
+            function addCount(max){
+              count++;
+
+              if(count == max){
+                writeStatus('success',count,results.length,'');
+              }
+              
+            }
             for(let row of results){
-              sendSms(row.NAME,row.PHONE,row.PAID,row.REMAINING);
+              sendSms(row.NAME,row.PHONE,row.PAID,row.REMAINING)
+              .then(value => addCount(results.length))
+              .catch(error => console.log(error));
+
             }
           }
           else if(message !== '' && date === '' || message != null && date == null){
@@ -308,7 +330,7 @@ app.get('/getfile', async(req,res)=>{
               contacts.push(String(row.PHONE));
             }
 
-            //sendBulkSms_scheduled(message,contacts,date);
+            sendBulkSms_scheduled(message,contacts,date);
           }
           
           // [
@@ -347,17 +369,18 @@ function readcsv2(res,message,date){
       });
 }
 
-  async function writeStatus(type,comment){
+  async function writeStatus(type,sent,total,reason){
 
     var pushid = db.ref('smslogs/').push().getKey();
-    var datetime = new Date();
-    console.log(datetime);
   
     await db.ref('smslogs/').child(String(pushid)).set({
         id: pushid,
         type: type, //success or error
-        comment: comment,
-        date: datetime
+        sent: sent,
+        total: total,
+        reason: reason,
+        date: day+'-'+month+'-'+year,
+        time: current_hour+':'+current_minutes
     }, async function(error) {
       if (error) {
         console.log(error);
@@ -367,11 +390,14 @@ function readcsv2(res,message,date){
 
   function sendSms(name,phone,paid,remaining){
     // SEND SMS
-    const axios = require('axios');
-    axios.get('https://sms.arkesel.com/sms/api?action=send-sms&api_key=Ok5uVUZkc0FtQjdERDk2eDg=&to='+phone+'&from=TIAIS&sms=Hello Guardian, An amount of '+
-    paid+' has been paid as School fees for '+name+'. the new outstanding balance is '+remaining+'.')
-    .then(response => console.log('sent successfully'))
-    .catch(error => console.log(error));
+
+    return new Promise((resolve, reject) => {
+      const axios = require('axios');
+      axios.get('https://sms.arkesel.com/sms/api?action=send-sms&api_key=Ok5uVUZkc0FtQjdERDk2eDg=&to='+phone+'&from=TIAIS&sms=Hello Guardian, An amount of '+
+      paid+' has been paid as School fees for '+name+'. the new outstanding balance is '+remaining+'.')
+      .then(response => resolve('success'))
+      .catch(error => reject('error'));
+    });
   }
 
   function sendSmsExam(name,phone,science,math,english,twi,social,ict,french,bdt,rme,ts,grade){
@@ -399,7 +425,7 @@ function readcsv2(res,message,date){
   function sendBulkSms(message,contacts){
     // SEND SMS
 
-    console.log(contacts);
+    //console.log(contacts);
 
     const axios = require('axios');
     const data = {"sender": "TIAIS",
@@ -417,12 +443,12 @@ function readcsv2(res,message,date){
 
     axios(config)
     .then(function (response) {
-    console.log(JSON.stringify(response.data));
-      writeStatus('success',String(response.data));
+    console.log(JSON.stringify(response.data.data));
+      writeStatus('success',String(response.data.data.length),String(contacts.length),'');
     })
     .catch(function (error) {
     console.log(error);
-      writeStatus('error',String(error.data));
+      writeStatus('error',String(0),String(contacts.length),String(error.message));
     });
   }
 
@@ -447,11 +473,11 @@ function readcsv2(res,message,date){
     axios(config)
     .then(function (response) {
         console.log(JSON.stringify(response.data));
-        writeStatus('success',String(response.data));
+        writeStatus('scheduled',String(contacts.length),String(contacts.length),'');
       })
       .catch(function (error) {
         console.log(error);
-        writeStatus('error',String(error.data));
+        writeStatus('error',String(0),String(contacts.length),String(error.message));
     });
 
   }
@@ -497,6 +523,40 @@ function readcsv2(res,message,date){
     }
   
     res.send(response);
+  });
+
+  app.get('/smslogs/', async(req,res)=>{
+
+    const eventref = db.ref("smslogs");
+    const snapshot = await eventref.once('value');
+    const value = snapshot.val();
+  
+    var data = Object.entries(value);
+  
+    let response = {};
+  
+    var responseArr = [];
+  
+    for(let val of data){
+
+      response = {
+        id: String(val[1].id),
+        date: String(val[1].date),
+        reason: String(val[1].reason),
+        sent: String(val[1].sent),
+        time: String(val[1].time),
+        total: String(val[1].total),
+        type: String(val[1].type)
+      }
+  
+      if(response.id != null){
+        responseArr.push(response);
+      }
+      
+      response = {};
+    }
+  
+    res.send(responseArr);
   });
 
 

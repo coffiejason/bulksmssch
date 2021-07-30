@@ -26,7 +26,8 @@
           <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
       </label>
       <ul>
-          <li><a href="fees.html" >School Fees Reciepts</a></li>
+          <li><a href="fees.html">Fees Reciepts</a></li>
+          <li><a href="examscores.html">Exam Results</a></li>
           <li><a href="custom.html">Custom Message</a></li>
           <li><a href="#" class="active">SMS Logs</a></li>
           <a class="logout" href="index.html" ><strong>Log Out</strong></a>
@@ -39,7 +40,7 @@
     <script>
         document.getElementById("tasks").innerHTML = ""+createLi('200 out of 200 messages are yet to be sent','22/01/2021','Scheduled for: 10:00 AM 12/07/2021', 'shagsj');
 
-        fetch('https://momoproxy.herokuapp.com/getvendor/'+lat+'/'+lng)
+        fetch('https://bulksmssch.herokuapp.com/smslogs/')
         .then(response => response.json())
         .then(data => load(data));
 
@@ -64,7 +65,7 @@
           else{
 
             for(i = 0; i<data.length; i++){
-            li += ""+createLi(data[i].location,data[i].comment,data[i].message,data[i].hisname,data[i].id); //edit this to meet new api
+            li += ""+createLi(data[i].sent+' out of '+data[i].total,data[i].date+" "+data[i].time,data[i].date+" "+data[i].time," ",data[i].type); //edit this to meet new api
             }
 
             document.getElementById("tasks").innerHTML = li;
@@ -77,7 +78,45 @@
           }
         }
 
-        function createLi(location, time, message, hisname, tid){
+        function createLi(location, time, message, tid, type){
+
+          if(type === "success"){
+            let Li = '<a href="#" class="list-group-item list-group-item-action" aria-current="true" style="margin: 1%;">'+
+                    '<img id="profile-photo" style="padding:10px; width:80px;" src="img/sms_sent.svg">'+
+                    '<div style="display:inline-block;">'+
+                      '<h5 style="margin-bottom: -17px;">'+location+' messages were sent successfully</h5>'+                      
+                      '<small class="text-muted" style="margin-bottom: -20px; display:none">'+time+'</small>'+
+                      '</div>'+
+                      '<p style="margin-left:15px" class="text-muted">Sent on '+message+'</p>'+
+                      '<small class="text-muted" style=" display:none"> Hellow </small>'
+                     +'</a>';
+            return Li;
+          }
+          else if(type === "error"){
+            let Li = '<a href="#" class="list-group-item list-group-item-action" aria-current="true" style="margin: 1%;">'+
+                    '<img id="profile-photo" style="padding:10px; width:80px;" src="img/sms_pending.svg">'+
+                    '<div style="display:inline-block;">'+
+                      '<h5 style="margin-bottom: -17px;">'+location+' were sent</h5>'+                      
+                      '<small class="text-muted" style="margin-bottom: -20px; display:none">'+time+'</small>'+
+                      '</div>'+
+                      '<p style="margin-left:15px" class="text-muted">Tried on '+message+'</p>'+
+                      '<small class="text-muted" style=" display:none"> Hellow </small>'
+                     +'</a>';
+            return Li;
+          }
+          else if(type === "scheduled"){
+            let Li = '<a href="#" class="list-group-item list-group-item-action" aria-current="true" style="margin: 1%;">'+
+                    '<img id="profile-photo" style="padding:10px; width:80px;" src="img/sms_pending.svg">'+
+                    '<div style="display:inline-block;">'+
+                      '<h5 style="margin-bottom: -17px;">'+location+' were scheduled</h5>'+                      
+                      '<small class="text-muted" style="margin-bottom: -20px; display:none">'+time+'</small>'+
+                      '</div>'+
+                      '<p style="margin-left:15px" class="text-muted">Scheduled on '+message+'</p>'+
+                      '<small class="text-muted" style=" display:none"> Hellow </small>'
+                     +'</a>';
+            return Li;
+          }
+
           let Li = '<a href="contact_vendor.html?tid='+tid+'" class="list-group-item list-group-item-action" aria-current="true" style="margin: 1%;">'+
                     '<img id="profile-photo" style="padding:10px; width:80px;" src="img/sms_pending.svg">'+
                     '<div style="display:inline-block;">'+
