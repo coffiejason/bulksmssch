@@ -566,7 +566,7 @@ app.get('/sendsms',(req,res)=>{
 
     const axios = require('axios');
     const data = {"sender": "MOMOPROXY",
-                  "message": "You have a new transaction request https://momoproxy-44cde.web.app/contact_customer.html?tid=-McgTIEdV-cs9jGCM9A8",
+                  "message": "You have a new transaction request ",
                   "recipients": ["233504524328","233504524328"]};
 
     const config = {
