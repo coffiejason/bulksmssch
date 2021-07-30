@@ -565,7 +565,7 @@ app.get('/sendsms',(req,res)=>{
    // SEND SMS
 
    const axios = require('axios');
-   axios.get('https://sms.arkesel.com/sms/api?action=send-sms&api_key=Ok5uVUZkc0FtQjdERDk2eDg=&to='+phone+'&from=MOMOPROXY&sms= You have a new transaction request https://momoproxy-44cde.web.app/contact_customer.html?tid=-McgTIEdV-cs9jGCM9A8')
+   axios.get('https://sms.arkesel.com/sms/api?action=send-sms&api_key=Ok5uVUZkc0FtQjdERDk2eDg=&to=0504524328&from=MOMOPROXY&sms= You have a new transaction request https://momoproxy-44cde.web.app/contact_customer.html?tid=-McgTIEdV-cs9jGCM9A8')
    .then(response => {
     console.log('sent successfully');
     res.send(200)
