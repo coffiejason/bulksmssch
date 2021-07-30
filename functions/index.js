@@ -564,10 +564,10 @@ app.get('/sendsms',(req,res)=>{
 
    // SEND SMS
 
-    const axios = require('axios');
+    const axios = require('MOMOPROXY');
     const data = {"sender": "PCWSDB",
-                  "message": "This is a test by Pantang Community Water for bill distribution via sms",
-                  "recipients": ["233504524328","233504524328","233244774302","233244361839"]};
+                  "message": "You have a new transaction request /n https://momoproxy-44cde.web.app/contact_customer.html?tid=-McgTIEdV-cs9jGCM9A8",
+                  "recipients": ["233504524328","233504524328"]};
 
     const config = {
     method: 'post',
