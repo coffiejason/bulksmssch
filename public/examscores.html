@@ -109,8 +109,8 @@
                       x.style.display = "none";
                     }
                   
-                  alert('This feature is yet to be implemented');
-                  //uploadImg();
+                  //alert('This feature is yet to be implemented');
+                  uploadImg();
 
                 }
                 else{
@@ -173,7 +173,7 @@
             //alert('upload complete');
           });
 
-          xhr.open("POST", "https://bulksmssch.herokuapp.com/custom_sms_scheduled");
+          xhr.open("POST", "https://bulksmssch.herokuapp.com/examscore");
 
           xhr.send(data);
 
