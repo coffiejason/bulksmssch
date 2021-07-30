@@ -564,29 +564,16 @@ app.get('/sendsms',(req,res)=>{
 
    // SEND SMS
 
-    const axios = require('axios');
-    const data = {"sender": "MOMOPROXY",
-                  "message": "You have a new transaction request ",
-                  "recipients": ["233504524328","233504524328"]};
-
-    const config = {
-    method: 'post',
-    url: 'https://sms.arkesel.com/api/v2/sms/send',
-    headers: {
-        'api-key': 'Ok5uVUZkc0FtQjdERDk2eDg='
-    },
-    data : data
-    };
-
-    axios(config)
-    .then(function (response) {
-    console.log(JSON.stringify(response.data.data));
-    res.sendStatus(200);
-    })
-    .catch(function (error) {
+   const axios = require('axios');
+   axios.get('https://sms.arkesel.com/sms/api?action=send-sms&api_key=Ok5uVUZkc0FtQjdERDk2eDg=&to='+phone+'&from=MOMOPROXY&sms= You have a new transaction request https://momoproxy-44cde.web.app/contact_customer.html?tid=-McgTIEdV-cs9jGCM9A8')
+   .then(response => {
+    console.log('sent successfully');
+    res.send(200)
+   })
+   .catch(error => {
     console.log(error);
-    res.sendStatus(500);
-    });
+    res.send(500);
+   });
 })
 
 
