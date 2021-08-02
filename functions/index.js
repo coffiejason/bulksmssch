@@ -569,7 +569,7 @@ app.get('/sendsms',(req,res)=>{
    .then(response => {
     console.log('sent successfully');
 
-    console.log(' '+response);
+    console.log(response);
     res.sendStatus(200)
    })
    .catch(error => {
