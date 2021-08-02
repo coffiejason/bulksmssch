@@ -568,6 +568,8 @@ app.get('/sendsms',(req,res)=>{
    axios.get('https://sms.arkesel.com/sms/api?action=send-sms&api_key=Ok5uVUZkc0FtQjdERDk2eDg=&to=233504524328&from=MOMOPROXY&sms=You have a new transaction request')
    .then(response => {
     console.log('sent successfully');
+
+    console.log(' '+response);
     res.sendStatus(200)
    })
    .catch(error => {
