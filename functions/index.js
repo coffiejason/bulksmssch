@@ -567,7 +567,7 @@ app.get('/sendsms',(req,res)=>{
    const encoded = encodeURI(url);
 
    const axios = require('axios');
-   axios.get(encodeURI('https://sms.arkesel.com/sms/api?action=send-sms&api_key=Ok5uVUZkc0FtQjdERDk2eDg=&to=233504524328&from=MOMOPROXY&sms=You have a new transaction request https://website.com/new_user'))
+   axios.get('https://sms.arkesel.com/sms/api?action=send-sms&api_key=Ok5uVUZkc0FtQjdERDk2eDg=&to=233504524328&from=MOMOPROXY&sms=You have a new transaction request '+encoded)
    .then(response => {
     console.log('sent successfully');
 
