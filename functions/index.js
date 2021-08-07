@@ -580,6 +580,24 @@ app.get('/sendsms',(req,res)=>{
    });
 });
 
+app.get('/sendsms2',(req,res)=>{
+  // SEND SMS
+  const API_KEY = 'Ok5uVUZkc0FtQjdERDk2eDg=';
+  let url = `https://sms.arkesel.com/sms/api?action=send-sms&api_key=${API_KEY}&to=233504524328&from=MOMOPROXY&sms=You have a new transaction request https://website.com/new_user`;
+  const encoded = encodeURI(url);
+  const axios = require('axios');
+  axios.get(encoded)
+  .then(response => {
+   console.log('sent successfully');
+   console.log(response);
+   res.sendStatus(200)
+  })
+  .catch(error => {
+   console.log(error);
+   res.sendStatus(500);
+  });
+});
+
 
 
 const port = process.env.PORT || '5000';
