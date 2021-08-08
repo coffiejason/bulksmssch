@@ -563,11 +563,11 @@ function readcsv2(res,message,date){
 app.get('/sendsms',(req,res)=>{
 
    // SEND SMS
-   let url = 'https://website.com/new_user';
+   let url = 'https://momoproxy-44cde.web.app/contactcustomer.html?tid=5ox5qlks36o232';
    const encoded = encodeURI(url);
 
    const axios = require('axios');
-   axios.get('https://sms.arkesel.com/sms/api?action=send-sms&api_key=Ok5uVUZkc0FtQjdERDk2eDg=&to=233504524328&from=MOMOPROXY&sms=You have a new transaction request '+encoded)
+   axios.get('https://sms.arkesel.com/sms/api?action=send-sms&api_key=Ok5uVUZkc0FtQjdERDk2eDg=&to=233504524328&from=MOMOPROXY&sms=You have a new transaction request \n'+encoded)
    .then(response => {
     console.log('sent successfully');
 
