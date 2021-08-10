@@ -33,6 +33,8 @@ var current_seconds =  dateObj.getSeconds();
 
 var eventEmitter = new events.EventEmitter();
 
+var smsname = 'TIAIS';
+
 eventEmitter.on('readfile', async function (res,message,date) {
   readcsv(res,message,date);
 });
@@ -393,7 +395,7 @@ function readcsv2(res,message,date){
 
     return new Promise((resolve, reject) => {
       const axios = require('axios');
-      axios.get('https://sms.arkesel.com/sms/api?action=send-sms&api_key=Ok5uVUZkc0FtQjdERDk2eDg=&to='+phone+'&from=TIAIS&sms=Hello Guardian, An amount of '+
+      axios.get('https://sms.arkesel.com/sms/api?action=send-sms&api_key=Ok5uVUZkc0FtQjdERDk2eDg=&to='+phone+'&from='+smsname+'&sms=Hello Guardian, An amount of '+
       paid+' has been paid as School fees for '+name+'. the new outstanding balance is '+remaining+'.')
       .then(response => resolve('success'))
       .catch(error => reject('error'));
@@ -403,7 +405,7 @@ function readcsv2(res,message,date){
   function sendSmsExam(name,phone,science,math,english,twi,social,ict,french,bdt,rme,ts,grade){
     // SEND SMS
     const axios = require('axios');
-    axios.get('https://sms.arkesel.com/sms/api?action=send-sms&api_key=Ok5uVUZkc0FtQjdERDk2eDg=&to='+phone+'&from=TIAIS&sms= END OF TERM EXAMINATION RESULTS'+
+    axios.get('https://sms.arkesel.com/sms/api?action=send-sms&api_key=Ok5uVUZkc0FtQjdERDk2eDg=&to='+phone+'&from='+smsname+'&sms= END OF TERM EXAMINATION RESULTS'+
     'STUDENT: '+name+'.  SCIENCE: '+science+' Mathematics: '+math+' ENGLISH: '+english+' TWI: '+twi+' SOCIAL STUDIES:'+social+' ICT:'+ict+' FRENCH:'+french+' BDT:'+bdt+' RME:'+rme+
     'TOTAL SCORE:'+ts+' GRADE:'+grade)
     .then(response => console.log('sent successfully'))
@@ -415,7 +417,7 @@ function readcsv2(res,message,date){
     // SCHEDULE SMS
     const axios = require('axios');
     //format date to match this format: DD-MM-YYYY
-    axios.get('https://sms.arkesel.com/sms/api?action=send-sms&api_key=Ok5uVUZkc0FtQjdERDk2eDg=&to='+phone+'&from=TIAIS&sms=Hello Guardian, An amount of '+
+    axios.get('https://sms.arkesel.com/sms/api?action=send-sms&api_key=Ok5uVUZkc0FtQjdERDk2eDg=&to='+phone+'&from='+smsname+'&sms=Hello Guardian, An amount of '+
     paid+' has been paid as School fees for '+name+'. the new outstanding balance is '+remaining+'.&schedule='+date+' 10:40 AM')
     .then(response => console.log('scheduled successfully'))
     .catch(error => console.log(error));
@@ -428,7 +430,7 @@ function readcsv2(res,message,date){
     //console.log(contacts);
 
     const axios = require('axios');
-    const data = {"sender": "TIAIS",
+    const data = {"sender": smsname,
                   "message": message,
                   "recipients": contacts};
 
@@ -456,7 +458,7 @@ function readcsv2(res,message,date){
 
     // SCHEDULE SMS
     const axios = require('axios');
-    const data = {"sender": "TIAIS",
+    const data = {"sender": smsname,
                   "message": message,
                   "recipients": contacts,
                   "scheduled_date": date+" 07:00 AM"};
