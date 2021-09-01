@@ -33,7 +33,7 @@ var current_seconds =  dateObj.getSeconds();
 
 var eventEmitter = new events.EventEmitter();
 
-var smsname = 'GGSC';
+var smsname = 'TIAIS';
 
 eventEmitter.on('readfile', async function (res,message,date) {
   readcsv(res,message,date);
