@@ -517,7 +517,7 @@ function readcsv2(res,message,date){
   
     for(let val of data){
   
-      if((String(req.body.email).trim().toLowerCase() === String(val[1].email) || String(req.body.phone).trim().toLowerCase() === String(val[1].phone).trim().toLowerCase()) && String(req.body.password).trim().toLowerCase() ===String(val[1].password).trim().toLowerCase()){
+      if((String(req.body.email).trim().toLowerCase() === String(val[1].email) || String(req.body.phone).trim().toLowerCase() === String(val[1].phone).trim().toLowerCase()) && String(req.body.password) ===String(val[1].password)){
         
         response = {response: "Success"}
   
